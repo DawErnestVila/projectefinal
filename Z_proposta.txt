@@ -1,0 +1,48 @@
+- Aquest projecte es farà utilitzant React per la part dels clients, fent crides a l'api i amb Blade la part de les perruqueres, utilitzant Inertia.js, per poder utilitzar React.
+## React ##
+- Al anar a la pàgina principal només hi haurà un formulari amb un camp per posar el número de telèfon, a la part superior també hi haurà un  enllaç que et portarà al login (per les perruqueres).
+- Un cop entris el número de telèfon, el sistema comprovarà si ja existeix, si és aixi et portarà a la vista per demanar hora, sino, es mostrarà un altre formulari on el client deixarà dades com el nom, correu, etc.
+- En la vista de demanar hora, s'haurà de seleccionar un dia, després es miraria si en aquell dia hi han hores lliures, si és aixi es mostrarien, si no n'hi han no et deixarà seleccionar cap hora. També apareixeran els tractaments i s'haurà de seleccionar un, per últim hi haurà un camp de text per si vols deixar algun missatge o el que sigui.
+- Un cop s'hagi fet la reserva, el client rebrà un correu confirmant la reserva amb la data, hora i tractament que ha reservat.
+## Blade ##
+- Per defecte hi haurà un usuari administrador que serà el del professorat, aquest serà l'únic usuari que tindrà el permís per crear altres usuaris.
+- Aquest usuari també podrà veure l'històric de reserves dels clients.
+- També podrà cancel·lar una reserva (si tinc temps per fer-ho, aixo és un extra).
+- Els usuaris dels alumnes, un cop s'hagin loguejat tindràn una vista on podràn entrar el telèfon o dni o un identificador per poder-se assignar el client. 
+
+## Base de Dades ##
+- Clients
+	- ID
+	- Nom
+	- Correu
+	- Telèfon
+	
+- Reserves
+	- ID
+	- ID Client
+	- Data Reserva
+	- Hora Reserva
+	- ID Tractament
+	- Missatge Addicional (nulleable)
+	
+- Tractaments
+	- ID
+	- Nom Tractament
+	- Descripció
+	- Durada
+	
+- Usuaris
+	- ID
+	- Nom_usuari
+	- Correu
+	- Contrasenya
+	
+- Historial Reserves
+	- ID
+	- ID Client
+	- Data Reserva
+	- Hora Reserva
+	- ID Tractament
+	- ID Usuari
+	- Data Cancel·lació (nulleable)
+	- Motiu Cancel·lació (nulleable)
