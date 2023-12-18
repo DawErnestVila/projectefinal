@@ -4,21 +4,28 @@ export const validateNum = (telefon) => {
     console.log("Entra a la funció validate");
 
     if (telefon === "") {
-        errorTelefonn.innerHTML = "El telefon és obligatori";
+        errorTelefonn.innerHTML = "El tèlefon és obligatori";
+        const telefon = document.querySelector("#telefon");
+        telefon.focus();
+        telefon.classList.add("border-red-500");
         return false;
     } else {
         errorTelefonn.innerHTML = "";
     }
 
     if (!/^\d+$/.test(telefon)) {
-        errorTelefonn.innerHTML = "El telefon ha de ser un número";
+        errorTelefonn.innerHTML = "El tèlefon ha de ser un número";
+        const telefon = document.querySelector("#telefon");
+        telefon.focus();
         return false;
     } else {
         errorTelefonn.innerHTML = "";
     }
 
     if (telefon.length !== 9) {
-        errorTelefonn.innerHTML = "El telefon ha de tenir 9 digits";
+        errorTelefonn.innerHTML = "El telèfon ha de tenir 9 digits";
+        const telefon = document.querySelector("#telefon");
+        telefon.focus();
         return false;
     } else {
         errorTelefonn.innerHTML = "";
@@ -37,6 +44,8 @@ export const validate = (nom, email) => {
     if (nom === "" || nom === null || nom === undefined) {
         if (errorNom) {
             errorNom.innerHTML = "El nom és obligatori";
+            const nom = document.querySelector("#nom");
+            nom.focus();
         }
         return false;
     } else {
@@ -47,7 +56,9 @@ export const validate = (nom, email) => {
 
     if (email === "" || email === null || email === undefined) {
         if (errorEmail) {
-            errorEmail.innerHTML = "El email és obligatori";
+            errorEmail.innerHTML = "L'email és obligatori";
+            const email = document.querySelector("#email");
+            email.focus();
         }
         return false;
     } else {
@@ -59,7 +70,9 @@ export const validate = (nom, email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
         if (errorEmail) {
-            errorEmail.innerHTML = "El email no és vàlid";
+            errorEmail.innerHTML = "L'email no és vàlid";
+            const email = document.querySelector("#email");
+            email.focus();
         }
         return false;
     } else {

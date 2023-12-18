@@ -32,7 +32,6 @@ const Usuari = () => {
                     // Realiza la solicitud POST aquí después de validar el nombre y el correo electrónico
                     await Inertia.post("/demanar-hora", {
                         telefon: phoneNumber,
-                        // Otras propiedades de usuario aquí
                     });
                 } else {
                     setIsUserExist(false);
@@ -56,6 +55,7 @@ const Usuari = () => {
                         type="tel"
                         name="telefon"
                         value={phoneNumber}
+                        id="telefon"
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="mt-2 p-2 w-full rounded bg-[#292f55] text focus:border-2 border-[#B6BBC4]"
                     />
@@ -63,6 +63,7 @@ const Usuari = () => {
                 <div
                     id="errorTelefon"
                     className="text-xs text-red-500 mt-0 mb-2"
+                    role="alert"
                 ></div>
 
                 {showUserDataForm && (
@@ -72,6 +73,7 @@ const Usuari = () => {
                             <input
                                 type="text"
                                 name="nom"
+                                id="nom"
                                 value={userData.name}
                                 onChange={(e) =>
                                     setUserData((prevUserData) => ({
@@ -85,12 +87,14 @@ const Usuari = () => {
                         <div
                             id="errorNom"
                             className="text-xs text-red-500 mt-0 mb-2"
+                            role="alert"
                         ></div>
                         <label className="block mb-4">
                             Email:
                             <input
                                 type="email"
                                 name="email"
+                                id="email"
                                 value={userData.email}
                                 onChange={(e) =>
                                     setUserData((prevUserData) => ({
@@ -104,6 +108,7 @@ const Usuari = () => {
                         <div
                             id="errorEmail"
                             className="text-xs text-red-500 mt-0 mb-2"
+                            role="alert"
                         ></div>
                         {/* Otros campos del formulario del usuario */}
                     </>
