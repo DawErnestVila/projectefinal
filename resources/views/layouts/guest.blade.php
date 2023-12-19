@@ -14,15 +14,21 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <style>
+        body {
+            background-image: url('{{ asset('images/login_background_done.webp') }}');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            height: 100vh;
+        }
+    </style>
 </head>
 
-<body class="font-sans text-gray-900 antialiased bg-[#31304D]" style="opacity: 0.9;">
-    <div class="absolute inset-0 z-[-1]"
-        style="background-image: url('{{ asset('https://img.freepik.com/vector-gratis/papel-pintado-abstracto-blanco_23-2148817745.jpg?w=1380&t=st=1702839204~exp=1702839804~hmac=273ffdee52fd1b9d2a2e52e2a17cd56f82fc818d162992712046db8cb9271e8b') }}');
-           background-size: cover;
-           background-repeat: no-repeat;
-           opacity: 0.2;">
-    </div>
+<body class="font-sans text-gray-900 antialiased">
+
     <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 text-gray-300">
         <div>
             <a href="/" class="hover:text-gray-500 transition-colors duration-300">
@@ -35,6 +41,11 @@
 
             {{ $slot }}
         </div>
+        <span>
+            Imatge de <a
+                href="https://www.freepik.es/vector-gratis/papel-pintado-abstracto-blanco_12066076.htm#query=white%20geometric%20background&position=0&from_view=search&track=ais&uuid=271032b7-4b3a-4905-92f7-ce94831cbf96"
+                class="text-white font-semibold">Freepik</a>
+        </span>
     </div>
 </body>
 

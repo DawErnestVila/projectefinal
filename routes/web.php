@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use Illuminate\Support\Facades\Route;
-use GuzzleHttp\Psr7\Request as GuzzleRequequest;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientController;
+use App\Http\Controllers\ProfileController;
+use GuzzleHttp\Psr7\Request as GuzzleRequequest;
 use Illuminate\Http\Request as IlluminateRequest;
 
 /*
@@ -21,41 +22,11 @@ use Illuminate\Http\Request as IlluminateRequest;
 //     return view('welcome');
 // });
 
-Route::get('/', function () {
-    return Inertia::render('Layout');
-})->name('home');
+Route::get('/', [ClientController::class, 'index'])->name('home');
 
-Route::get('/demanar-hora', function () {
-    return Inertia::render('Layout');
-})->name('demanar-hora');
+Route::get('/demanar-hora', [ClientController::class, 'demanarHoraGet'])->name('demanar-hora');
 
-Route::post('/demanar-hora', function (IlluminateRequest $request) {
-    $telefon = $request->input('telefon');
-
-    // Aquí pots buscar l'usuari a la base de dades
-    //? $user = User::where('telefon', $telefon)->first();
-    $user = [
-        'id' => 1, // Aquesta és la clau primària de la taula 'users
-        'nom' => 'Ernest',
-        'cognoms' => 'Vilà',
-        'telefon' => $telefon,
-        'email' => 'ernestvila@gmail.com',
-    ];
-
-    // $user = null;
-    // dd($user);
-
-    if ($user) {
-        // Si l'usuari ja existeix, torna les dades de l'usuari a la vista
-        return Inertia::render('Layout', [
-            'user' => $user,
-        ]);
-    } else {
-        // Si l'usuari no existeix, pots manejar-ho com vulguis
-        // En aquest exemple, simplement redirigim a una altra pàgina d'error
-        return Inertia::render('Error');
-    }
-})->name('demanar-hora-post');
+Route::post('/demanar-hora', [ClientController::class, 'demanarHoraPost'])->name('demanar-hora-post');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

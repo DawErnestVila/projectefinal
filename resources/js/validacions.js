@@ -1,13 +1,10 @@
 export const validateNum = (telefon) => {
     const errorTelefonn = document.querySelector("#errorTelefon");
 
-    console.log("Entra a la funció validate");
-
     if (telefon === "") {
         errorTelefonn.innerHTML = "El tèlefon és obligatori";
         const telefon = document.querySelector("#telefon");
         telefon.focus();
-        telefon.classList.add("border-red-500");
         return false;
     } else {
         errorTelefonn.innerHTML = "";
@@ -34,8 +31,9 @@ export const validateNum = (telefon) => {
     return true;
 };
 
-export const validate = (nom, email) => {
+export const validate = (nom, cognoms, email) => {
     const errorNom = document.querySelector("#errorNom");
+    const errorCognoms = document.querySelector("#errorCognoms");
     const errorEmail = document.querySelector("#errorEmail");
 
     console.log(email);
@@ -51,6 +49,49 @@ export const validate = (nom, email) => {
     } else {
         if (errorNom) {
             errorNom.innerHTML = "";
+        }
+    }
+
+    const nomRegex = /^[a-zA-ZÀ-ÿ\s]{1,40}$/;
+    if (!nomRegex.test(nom)) {
+        if (errorNom) {
+            errorNom.innerHTML =
+                "El nom no és vàlid, només es permeten lletres i espais, fins a 40 caràcters";
+            const nom = document.querySelector("#nom");
+            nom.focus();
+        }
+        return false;
+    } else {
+        if (errorNom) {
+            errorNom.innerHTML = "";
+        }
+    }
+
+    if (cognoms === "" || cognoms === null || cognoms === undefined) {
+        if (errorCognoms) {
+            errorCognoms.innerHTML = "Els cognoms són obligatoris";
+            const cognoms = document.querySelector("#cognoms");
+            cognoms.focus();
+        }
+        return false;
+    } else {
+        if (errorCognoms) {
+            errorCognoms.innerHTML = "";
+        }
+    }
+
+    const cognomsRegex = /^[a-zA-ZÀ-ÿ\s]{1,80}$/;
+    if (!cognomsRegex.test(cognoms)) {
+        if (errorCognoms) {
+            errorCognoms.innerHTML =
+                "Els cognoms no són vàlids, només es permeten lletres i espais, fins a 80 caràcters";
+            const cognoms = document.querySelector("#cognoms");
+            cognoms.focus();
+        }
+        return false;
+    } else {
+        if (errorCognoms) {
+            errorCognoms.innerHTML = "";
         }
     }
 

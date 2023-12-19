@@ -1,17 +1,15 @@
 import React from "react";
 import Usuari from "./Usuari";
 import Reserva from "./Reserva";
+import background from "../../../public/images/background_low.webp";
 
 const Layout = (props) => {
     const pathname = window.location.pathname;
 
-    // Lógica para determinar qué componente renderizar según pathname
     let contentComponent;
     if (pathname === "/") {
-        // Muestra el component Usuari si la ruta es "/"
         contentComponent = <Usuari />;
     } else if (pathname === "/demanar-hora") {
-        // Muestra el component Reserva si la ruta es "/demanar-hora"
         contentComponent = <Reserva user={props.user} />;
     } else {
         contentComponent = <Usuari />;
@@ -19,19 +17,23 @@ const Layout = (props) => {
 
     return (
         <div
-            className="flex flex-col h-screen bg-[#31304D]"
-            style={{ opacity: 0.9 }}
+            className="flex flex-col h-screen"
+            // style={{ opacity: 0.9 }}
         >
-            <div
-                className="absolute inset-0 z-[-1]"
+            {/* <div
+                className="h-[200vh] absolute inset-0 z-[-1]"
                 style={{
-                    backgroundImage:
-                        "url('https://images.unsplash.com/photo-1562322140-8baeececf3df?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')",
+                    margin: 0,
+                    backgroundImage: `url(${background})`,
                     backgroundSize: "cover",
                     backgroundRepeat: "no-repeat",
+                    backgroundAttachment: "fixed",
+                    minHeight: "100vh",
+                    display: "flex",
                     opacity: 0.2,
+                    height: "100vh", // Set height to 100vh
                 }}
-            ></div>
+            ></div> */}
             <header className="py-4 px-6 flex justify-end">
                 <a
                     href="/login"
@@ -45,6 +47,22 @@ const Layout = (props) => {
                     Perruqueria Cirviànum
                 </h1>
                 {contentComponent}
+                <span className="text-xs text-gray-200 mb-0">
+                    Foto d'
+                    <a
+                        href="https://unsplash.com/es/@awcreativeut?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+                        className="text-white font-semibold"
+                    >
+                        Adam Winger
+                    </a>{" "}
+                    a{" "}
+                    <a
+                        href="https://unsplash.com/es/fotos/mujer-sosteniendo-secador-de-pelo-WXmHwPcFamo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
+                        className="text-white font-semibold"
+                    >
+                        Unsplash
+                    </a>
+                </span>
             </main>
         </div>
     );
