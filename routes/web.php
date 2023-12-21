@@ -24,7 +24,7 @@ use Illuminate\Http\Request as IlluminateRequest;
 
 Route::get('/', [ClientController::class, 'index'])->name('home');
 
-Route::get('/demanar-hora', [ClientController::class, 'index'])->name('demanar-hora');
+Route::get('/demanar-hora', [ClientController::class, 'demanarHoraGet'])->name('demanar-hora');
 
 Route::post('/demanar-hora', [ClientController::class, 'demanarHoraPost'])->name('demanar-hora-post');
 

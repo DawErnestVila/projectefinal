@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 import { Spanish } from "flatpickr/dist/l10n/es.js";
 import "flatpickr/dist/themes/dark.css";
+import { getHoraris } from "../apiReserva";
 
 flatpickr.l10ns.default.firstDayOfWeek = 1;
 
-const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
+const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate, openDays }) => {
     const datePickerRef = useRef(null);
     // console.log(disabledDatesProps);
 
@@ -16,7 +17,7 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
             disable: [
                 function (date) {
                     // Disable days other than Thursday and Friday
-                    return !(date.getDay() === 4 || date.getDay() === 5);
+                    return !openDays.includes(date.getDay());
                 },
                 function (date) {
                     // Disable specific dates
@@ -87,7 +88,7 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
                 },
             },
             minDate: today.fp_incr(1),
-            maxDate: new Date().fp_incr(6 * 30),
+            maxDate: new Date().fp_incr(2 * 30),
             theme: "dark",
         });
 

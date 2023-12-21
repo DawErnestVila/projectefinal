@@ -16,8 +16,20 @@ const Reserva = ({ user }) => {
     const [horaris, setHoraris] = useState([]);
     const [disabledDates, setDisabledDates] = useState([]); // Nou estat per les dates deshabilitades
     const [availableHours, setAvailableHours] = useState([]);
+    const [openDays, setOpenDays] = useState([]);
+
+    const getOpenDays = async () => {
+        const response = await getHoraris();
+        const horaris = response.data;
+        const openDays = horaris.map((horari) => {
+            return horari.dia;
+        });
+        console.log(openDays);
+        setOpenDays(openDays);
+    };
 
     useEffect(() => {
+        getOpenDays();
         const fetchData = async () => {
             try {
                 const response = await getTractaments();
@@ -44,14 +56,14 @@ const Reserva = ({ user }) => {
         // Assegura't que la funció només s'executi quan selectedDate és diferent de null
         if (selectedDate) {
             // Aquí pots cridar la funció que necessites
-            getAvailableHours(selectedTractament);
+            getAvailableHours();
         }
     }, [selectedDate]);
 
     const getAvailableHoursWithoutReservations = (startHour, endHour) => {
         const availableHours = [];
 
-        for (let hour = startHour; hour <= endHour; hour++) {
+        for (let hour = startHour; hour < endHour; hour++) {
             availableHours.push(`${hour}:00`);
             availableHours.push(`${hour}:15`);
             availableHours.push(`${hour}:30`);
@@ -63,7 +75,7 @@ const Reserva = ({ user }) => {
     };
 
     // Afegeix una funció per obtenir les hores disponibles en funció del dia i tractament seleccionat
-    const getAvailableHours = async (selectedTreatment) => {
+    const getAvailableHours = async () => {
         try {
             const reservedHoursData = await getHoresDisponibles({
                 dia: selectedDate,
@@ -79,7 +91,7 @@ const Reserva = ({ user }) => {
                     extractHour(data.hora_tancament)
                 );
 
-            console.log(availableHoursWithoutReservations);
+            // console.log(availableHoursWithoutReservations);
 
             function extractHour(timeString) {
                 const [hour] = timeString.split(":");
@@ -89,15 +101,13 @@ const Reserva = ({ user }) => {
             const reservesForDay = await getReservesForDay();
             // console.log(reservesForDay);
 
-            // console.log(reservesForDay);
-
             // Eliminar les hores ja reservades
             const availableHours = availableHoursWithoutReservations.map(
                 (hour) => {
                     const isReserved = reservesForDay.some(
                         (reserve) =>
                             reserve.horaInicial <= hour &&
-                            reserve.horaFinal >= hour
+                            reserve.horaFinal > hour
                     );
 
                     return isReserved ? null : hour;
@@ -237,6 +247,7 @@ const Reserva = ({ user }) => {
                                 <MyNewDatePicker
                                     disabledDatesProps={disabledDates}
                                     setSelectedDate={setSelectedDate}
+                                    openDays={openDays}
                                 />
                             </div>
 
