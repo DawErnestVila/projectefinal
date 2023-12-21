@@ -18,3 +18,36 @@ export function getDiesDeshabilitats() {
         response.json()
     );
 }
+
+// Get hores disponibles
+export function getHoresDisponibles(data) {
+    return fetch(`${API_URL}/gethoresdisponibles`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}
+
+// Get reserves del dia
+export function getReservesDia(data) {
+    return fetch(`${API_URL}/getreservesdia`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}
+
+// Get tractament per id
+export function getTractamentId(data) {
+    return fetch(`${API_URL}/gettractamentid`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}

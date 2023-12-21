@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Reserve;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Client extends Model
 {
@@ -15,4 +16,10 @@ class Client extends Model
         'correu',
         'telefon',
     ];
+
+
+    public function reserves()
+    {
+        return $this->hasMany(Reserve::class);
+    }
 }

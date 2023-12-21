@@ -18,4 +18,15 @@ class TractamentController extends Controller
             'data' => $tractaments,
         ]);
     }
+
+    public function getTractamentId(Request $request)
+    {
+        $tractament = Tractament::where('id', $request->id)->first();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'JSON received successfully',
+            'data' => $tractament,
+        ]);
+    }
 }

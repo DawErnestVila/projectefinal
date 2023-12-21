@@ -14,4 +14,9 @@ class Tractament extends Model
         'descripcio',
         'durada',
     ];
+
+    public function reserves()
+    {
+        return $this->hasMany(Reserve::class);
+    }
 }

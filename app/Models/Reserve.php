@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Reserva extends Model
+class Reserve extends Model
 {
     use HasFactory;
 
@@ -16,4 +16,14 @@ class Reserva extends Model
         'hora',
         'comentari',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function tractament()
+    {
+        return $this->belongsTo(Tractament::class);
+    }
 }

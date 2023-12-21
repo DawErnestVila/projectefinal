@@ -6,6 +6,7 @@ use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HorariController;
 use App\Http\Controllers\TractamentController;
 use App\Http\Controllers\DiesDeshabilitatController;
+use App\Http\Controllers\ReservaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +24,9 @@ Route::post('/storeclient', [ClientController::class, 'storeClientApi'])->name('
 Route::get('/gettractaments', [TractamentController::class, 'getTractamentsApi'])->name('gettractaments');
 Route::get('/gethoraris', [HorariController::class, 'getHorarisApi'])->name('getoraris');
 Route::get('/getdiesdeshabilitats', [DiesDeshabilitatController::class, 'getDiaDeshabilitatsApi'])->name('getdiesdesabilitats');
+Route::post('/gethoresdisponibles', [HorariController::class, 'getHoresDisponiblesApi'])->name('gethoresdisponibles');
+Route::post('/getreservesdia', [ReservaController::class, 'getReservesDia'])->name('getreservesdia');
+Route::post('/gettractamentid', [TractamentController::class, 'getTractamentId'])->name('gettractamentid');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

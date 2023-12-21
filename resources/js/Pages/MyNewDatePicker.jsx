@@ -8,7 +8,7 @@ flatpickr.l10ns.default.firstDayOfWeek = 1;
 
 const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
     const datePickerRef = useRef(null);
-    console.log(disabledDatesProps);
+    // console.log(disabledDatesProps);
 
     useEffect(() => {
         const today = new Date();
