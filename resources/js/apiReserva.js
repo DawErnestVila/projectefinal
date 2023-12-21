@@ -6,3 +6,8 @@ export function getTractaments() {
         response.json()
     );
 }
+
+// Get horaris
+export function getHoraris() {
+    return fetch(`${API_URL}/gethoraris`).then((response) => response.json());
+}

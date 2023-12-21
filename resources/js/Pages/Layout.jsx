@@ -1,7 +1,6 @@
 import React from "react";
 import Usuari from "./Usuari";
 import Reserva from "./Reserva";
-import background from "../../../public/images/background_low.webp";
 
 const Layout = (props) => {
     const pathname = window.location.pathname;
@@ -16,24 +15,7 @@ const Layout = (props) => {
     }
 
     return (
-        <div
-            className="flex flex-col h-screen"
-            // style={{ opacity: 0.9 }}
-        >
-            {/* <div
-                className="h-[200vh] absolute inset-0 z-[-1]"
-                style={{
-                    margin: 0,
-                    backgroundImage: `url(${background})`,
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundAttachment: "fixed",
-                    minHeight: "100vh",
-                    display: "flex",
-                    opacity: 0.2,
-                    height: "100vh", // Set height to 100vh
-                }}
-            ></div> */}
+        <div className="flex flex-col h-screen">
             <header className="py-4 px-6 flex justify-end">
                 <a
                     href="/login"

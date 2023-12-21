@@ -1,16 +1,24 @@
-import { React, useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import BackButton from "./BackButton";
-import { getTractaments } from "../apiTractaments";
+import MyNewDatePicker from "./MyNewDatePicker";
+import { getTractaments, getHoraris } from "../apiReserva";
 
 const Reserva = ({ user }) => {
     const [selectedTractament, setSelectedTractament] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null); // Nou estat per la data seleccionada
     const [tractaments, setTractaments] = useState([]);
+    const [horaris, setHoraris] = useState([]);
+    const [disabledDates, setDisabledDates] = useState([]); // Nou estat per les dates deshabilitades
+    const datePickerRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await getTractaments();
                 setTractaments(response.data);
+                const horarisResp = await getHoraris();
+                setHoraris(horarisResp.data);
+                // Afegeix la lògica per obtenir les dates deshabilitades
             } catch (error) {
                 console.error("Error fetching treatments:", error);
             }
@@ -19,8 +27,18 @@ const Reserva = ({ user }) => {
         fetchData();
     }, []);
 
+    const isSalonOpenOnDay = (dayOfWeek) => {
+        // Implementa la lògica per comprovar si la perruqueria està oberta en el dia proporcionat.
+    };
+
+    // Afegeix una funció per obtenir les hores disponibles en funció del dia i tractament seleccionat
+    const getAvailableHours = (selectedDay) => {
+        // Fes una crida a l'API per obtenir les hores disponibles pel dia i tractament seleccionat.
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log(selectedDate);
         // Implement reservation logic here
     };
 
@@ -33,11 +51,6 @@ const Reserva = ({ user }) => {
                 <h1 className="text-2xl font-black mb-8">
                     Selecciona un tractament i la data desitjada
                 </h1>
-                {/* Sortirà un camp amb el nom, però no es podrà modificar,
-                primer s'haurà de mostrar els diferents tractaments, els altres camps estaran amagats fins que es seleccioni un tractament i es trobis dies i hores lliures, després
-                depenent de les hores disponibles, es mostrarà els dies
-                disponibles i les hores disponibles, i finalment es mostrarà un
-                botó per confirmar la reserva */}
                 <form onSubmit={handleSubmit}>
                     <div className="flex flex-col mb-4">
                         <label htmlFor="nom" className="mb-2 font-semibold">
@@ -45,7 +58,7 @@ const Reserva = ({ user }) => {
                         </label>
                         <input
                             type="text"
-                            value={user.nom}
+                            defaultValue={user.nom}
                             disabled
                             className="p-2 rounded-md bg-[#151520] text-gray-300 disabled:opacity-50"
                         />
@@ -87,16 +100,12 @@ const Reserva = ({ user }) => {
                                 >
                                     Dia
                                 </label>
-                                <select
-                                    name="dia"
-                                    id="dia"
-                                    className="p-2 rounded-md bg-[#31304D] text-gray-300"
-                                >
-                                    <option value="1">Dilluns 1</option>
-                                    <option value="2">Dimarts 2</option>
-                                    <option value="3">Dimecres 3</option>
-                                </select>
+                                <MyNewDatePicker
+                                    disabledDatesProps={[new Date(2024, 0, 4)]}
+                                    setSelectedDate={setSelectedDate}
+                                />
                             </div>
+
                             <div className="flex flex-col mb-4">
                                 <label
                                     htmlFor="hora"

@@ -1,0 +1,34 @@
+/* styles.css */
+
+/* Color del fons del calendari */
+.react-calendar {
+    background-color: #f0f0f0;
+}
+
+/* Color del text de la data seleccionada */
+.react-calendar__tile--active {
+    background-color: #3498db;
+    color: #ce6363;
+}
+
+/* Color del text del dia actual */
+.react-calendar__tile--now {
+    color: #e74c3c;
+}
+
+/* Color del text dels dies de la setmana */
+.react-calendar__month-view__weekdays__weekday {
+    color: #333333;
+}
+
+/* Color dels nombres dels dies */
+.react-calendar__month-view__days__day {
+    color: #555555;
+}
+
+/* Color del text dels nombres dels dies quan s'activen */
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+    background: #2980b9;
+    color: #ffffff;
+}

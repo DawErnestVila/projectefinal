@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horari;
-use App\Models\Tractament;
 use Illuminate\Http\Request;
 
-class TractamentController extends Controller
+class HorariController extends Controller
 {
-    public function getTractamentsApi()
+    public function getHorarisApi()
     {
-        $tractaments = Tractament::all();
+        $horaris = Horari::all();
 
         return response()->json([
             'status' => 'success',
             'message' => 'JSON received successfully',
-            'data' => $tractaments,
+            'data' => $horaris,
         ]);
     }
 }
