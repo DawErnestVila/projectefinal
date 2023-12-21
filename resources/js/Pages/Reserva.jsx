@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import BackButton from "./BackButton";
 import MyNewDatePicker from "./MyNewDatePicker";
-import { getTractaments, getHoraris } from "../apiReserva";
+import {
+    getTractaments,
+    getHoraris,
+    getDiesDeshabilitats,
+} from "../apiReserva";
 
 const Reserva = ({ user }) => {
     const [selectedTractament, setSelectedTractament] = useState(null);
@@ -18,7 +22,16 @@ const Reserva = ({ user }) => {
                 setTractaments(response.data);
                 const horarisResp = await getHoraris();
                 setHoraris(horarisResp.data);
-                // Afegeix la lògica per obtenir les dates deshabilitades
+                const disabledDatesResp = await getDiesDeshabilitats();
+                let disabledDatesAux = [];
+                // console.log(disabledDatesResp.data);
+                disabledDatesResp.data.forEach((date) => {
+                    disabledDatesAux.push(
+                        new Date(date.data).toISOString().split("T")[0]
+                    );
+                });
+                setDisabledDates(disabledDatesAux);
+                // setDisabledDates(disabledDatesResp.data);
             } catch (error) {
                 console.error("Error fetching treatments:", error);
             }
@@ -101,7 +114,7 @@ const Reserva = ({ user }) => {
                                     Dia
                                 </label>
                                 <MyNewDatePicker
-                                    disabledDatesProps={[new Date(2024, 0, 4)]}
+                                    disabledDatesProps={disabledDates}
                                     setSelectedDate={setSelectedDate}
                                 />
                             </div>

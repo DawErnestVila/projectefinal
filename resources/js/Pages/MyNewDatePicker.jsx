@@ -8,6 +8,7 @@ flatpickr.l10ns.default.firstDayOfWeek = 1;
 
 const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
     const datePickerRef = useRef(null);
+    console.log(disabledDatesProps);
 
     useEffect(() => {
         const today = new Date();
@@ -19,14 +20,18 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
                 },
                 function (date) {
                     // Disable specific dates
-                    const disabledDates = [
-                        //AQUI HI POSAREM UN PROP DE LA PAGINA RESERVA QUE ES DIU DISABLEDDATES ON HI HAURÀ UN ARRAY DE DATES
-                        ...disabledDatesProps,
-                    ];
-                    return disabledDates.some(
-                        (disabledDate) =>
-                            date.getTime() === disabledDate.getTime()
+                    const disabledDates = disabledDatesProps.map(
+                        (dateStr) => new Date(dateStr)
                     );
+
+                    return disabledDates.some((disabledDate) => {
+                        // Comparar les dates sense tenir en compte els components de temps
+                        return (
+                            date.getFullYear() === disabledDate.getFullYear() &&
+                            date.getMonth() === disabledDate.getMonth() &&
+                            date.getDate() === disabledDate.getDate()
+                        );
+                    });
                 },
             ],
             locale: {
@@ -81,8 +86,7 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
                     ],
                 },
             },
-            minDate: today,
-            defaultDate: today,
+            minDate: today.fp_incr(1),
             maxDate: new Date().fp_incr(6 * 30),
             theme: "dark",
         });
@@ -98,6 +102,7 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate }) => {
             type="text"
             ref={datePickerRef}
             className="bg-[#31304D] rounded-md"
+            placeholder="Selecciona un dia"
         />
     );
 };

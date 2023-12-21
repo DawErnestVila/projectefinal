@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HorariController;
 use App\Http\Controllers\TractamentController;
+use App\Http\Controllers\DiesDeshabilitatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,7 @@ Route::post('/existeixclient', [ClientController::class, 'existeixClientApi'])->
 Route::post('/storeclient', [ClientController::class, 'storeClientApi'])->name('storeclient');
 Route::get('/gettractaments', [TractamentController::class, 'getTractamentsApi'])->name('gettractaments');
 Route::get('/gethoraris', [HorariController::class, 'getHorarisApi'])->name('getoraris');
+Route::get('/getdiesdeshabilitats', [DiesDeshabilitatController::class, 'getDiaDeshabilitatsApi'])->name('getdiesdesabilitats');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

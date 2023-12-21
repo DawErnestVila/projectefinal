@@ -11,3 +11,10 @@ export function getTractaments() {
 export function getHoraris() {
     return fetch(`${API_URL}/gethoraris`).then((response) => response.json());
 }
+
+// Get dies deshabilitats
+export function getDiesDeshabilitats() {
+    return fetch(`${API_URL}/getdiesdeshabilitats`).then((response) =>
+        response.json()
+    );
+}
