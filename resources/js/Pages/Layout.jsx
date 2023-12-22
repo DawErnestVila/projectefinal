@@ -27,6 +27,7 @@ const Layout = ({ user, status, missatge }) => {
 
             // Esborra el missatge després d'un temps determinat
             const timeoutId = setTimeout(() => {
+                setShowFlashMessage(false);
                 setFlashMessage(null);
             }, 5000); // Ajusta el temps segons les teves necessitats
 
@@ -48,13 +49,20 @@ const Layout = ({ user, status, missatge }) => {
                 {showFlashMessage && (
                     <div
                         className={
-                            status == "success"
-                                ? "bg-green-300 text-black font-black p-3 mb-3 rounded-md"
-                                : status == "error"
-                                ? "bg-red-300 text-black font-black p-3 mb-3 rounded-md"
+                            status === "success"
+                                ? "bg-green-300 text-black font-black p-3 pt-5 mb-3 rounded-md relative"
+                                : status === "error"
+                                ? "bg-red-300 text-black font-black p-3 pt-5 mb-3 rounded-md relative"
                                 : null
                         }
                     >
+                        <button
+                            className="absolute top-0 right-2 cursor-pointer"
+                            onClick={() => setShowFlashMessage(false)}
+                        >
+                            x{" "}
+                            {/* Aquí pots utilitzar un ícone de creueta o el text 'X' */}
+                        </button>
                         {flashMessage.missatge}
                     </div>
                 )}
