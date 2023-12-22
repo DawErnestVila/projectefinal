@@ -59,6 +59,8 @@ class ReservaController extends Controller
             'comentari' => $data['missatge'],
         ]);
 
+        //TODO S'hauria d'enviar un correu al client amb la confirmació de la reserva
+
 
         return response()->json([
             'status' => 'success',

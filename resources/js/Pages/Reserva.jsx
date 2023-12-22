@@ -341,13 +341,20 @@ const Reserva = ({ user }) => {
                                 <select
                                     name="hora"
                                     id="hora"
-                                    className="p-2 rounded-md bg-[#31304D] text-gray-300"
+                                    className={`p-2 rounded-md bg-[#31304D] text-gray-300 ${
+                                        availableHours.length === 0
+                                            ? "opacity-50 cursor-not-allowed"
+                                            : ""
+                                    }`}
                                     onChange={(e) =>
                                         setSelectedHour(e.target.value)
                                     }
+                                    disabled={availableHours.length === 0}
                                 >
                                     <option value="" disabled selected>
-                                        Selecciona una hora
+                                        {availableHours.length === 0
+                                            ? "No hi ha hores disponibles"
+                                            : "Selecciona una hora"}
                                     </option>
                                     {availableHours.map((hour) => (
                                         <option key={hour} value={hour}>
@@ -361,7 +368,6 @@ const Reserva = ({ user }) => {
                                     role="alert"
                                 ></div>
                             </div>
-                            {/* Falta posar un input per poder deixar un missatge per si el client vols dir alguna cosa,no és obligatori */}
                             <div className="flex flex-col mb-4">
                                 <label
                                     htmlFor="missatge"
@@ -381,7 +387,7 @@ const Reserva = ({ user }) => {
                             </div>
                             <button
                                 type="submit"
-                                className="bg-[#161A30] border-gray-300 border-2 text-gray-300 p-2 rounded-md font-semibold hover:bg-[#B6BBC4] hover:text-[#161A30] transition-colors duration-500 disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-gray-300"
+                                className="bg-[#161A30] border-gray-300 border-2 text-gray-300 p-2 rounded-md font-semibold hover:bg-[#B6BBC4] hover:text-[#161A30] transition-colors duration-500 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-gray-300"
                                 disabled={
                                     !selectedTractament ||
                                     !selectedDate ||
