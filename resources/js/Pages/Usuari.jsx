@@ -3,7 +3,7 @@ import { Inertia } from "@inertiajs/inertia";
 import { validateNum, validate } from "../validacions";
 import { checkUser, store } from "../apiClient";
 
-const Usuari = () => {
+const Usuari = (props) => {
     const [phoneNumber, setPhoneNumber] = useState("");
     const [userData, setUserData] = useState({
         name: "",

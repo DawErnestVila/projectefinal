@@ -1,18 +1,38 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Usuari from "./Usuari";
 import Reserva from "./Reserva";
 
-const Layout = (props) => {
+const Layout = ({ user, status, missatge }) => {
     const pathname = window.location.pathname;
+    const [flashMessage, setFlashMessage] = useState(null);
+    const [showFlashMessage, setShowFlashMessage] = useState(false);
 
     let contentComponent;
     if (pathname === "/") {
         contentComponent = <Usuari />;
     } else if (pathname === "/demanar-hora") {
-        contentComponent = <Reserva user={props.user} />;
+        contentComponent = <Reserva user={user} />;
     } else {
         contentComponent = <Usuari />;
     }
+
+    useEffect(() => {
+        if (pathname === "/demanar-hora") {
+            setShowFlashMessage(false);
+        }
+        // Mostra el missatge flash
+        if (status && missatge) {
+            setShowFlashMessage(true);
+            setFlashMessage({ status, missatge });
+
+            // Esborra el missatge després d'un temps determinat
+            const timeoutId = setTimeout(() => {
+                setFlashMessage(null);
+            }, 5000); // Ajusta el temps segons les teves necessitats
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [status, missatge]);
 
     return (
         <div className="flex flex-col h-screen">
@@ -25,6 +45,19 @@ const Layout = (props) => {
                 </a>
             </header>
             <main className="flex-grow flex flex-col items-center justify-center mx-4 sm:mx-8 text-center">
+                {showFlashMessage && (
+                    <div
+                        className={
+                            status == "success"
+                                ? "bg-green-300 text-black font-black p-3 mb-3 rounded-md"
+                                : status == "error"
+                                ? "bg-red-300 text-black font-black p-3 mb-3 rounded-md"
+                                : null
+                        }
+                    >
+                        {flashMessage.missatge}
+                    </div>
+                )}
                 <h1 className="text-gray-300 text-6xl mb-36 font-black">
                     Perruqueria Cirviànum
                 </h1>

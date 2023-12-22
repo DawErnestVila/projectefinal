@@ -1,12 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
 import BackButton from "./BackButton";
 import MyNewDatePicker from "./MyNewDatePicker";
+import { Inertia } from "@inertiajs/inertia";
+import { validateDiaHora } from "../validacions";
 import {
     getTractaments,
     getHoraris,
     getDiesDeshabilitats,
     getHoresDisponibles,
     getReservesDia,
+    storeReserva,
 } from "../apiReserva";
 
 const Reserva = ({ user }) => {
@@ -17,6 +20,8 @@ const Reserva = ({ user }) => {
     const [disabledDates, setDisabledDates] = useState([]); // Nou estat per les dates deshabilitades
     const [availableHours, setAvailableHours] = useState([]);
     const [openDays, setOpenDays] = useState([]);
+    const [selectedHour, setSelectedHour] = useState(null);
+    const [missatge, setMissatge] = useState(null);
 
     const getOpenDays = async () => {
         try {
@@ -119,7 +124,7 @@ const Reserva = ({ user }) => {
             );
 
             // Actualitzar l'estat amb les hores disponibles
-            console.log(availableHours);
+            // console.log(availableHours);
             const tractament = tractaments.find(
                 (tractament) => tractament.id == selectedTractament
             );
@@ -196,7 +201,7 @@ const Reserva = ({ user }) => {
     }
 
     function obtenirHoresDisponibles(hores, duradaTractament) {
-        console.log(duradaTractament);
+        // console.log(duradaTractament);
         var horesDisponibles = [];
 
         // Converteix la durada del tractament a minuts
@@ -230,10 +235,23 @@ const Reserva = ({ user }) => {
         return horesDisponibles;
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(selectedDate);
-        // Implement reservation logic here
+        const reserva = {
+            dia: selectedDate,
+            hora: selectedHour,
+            tractament_id: selectedTractament,
+            client_id: user.id,
+            missatge: missatge,
+        };
+        const correcte = validateDiaHora(reserva);
+        if (correcte) {
+            const response = await storeReserva(reserva);
+            Inertia.post("/", {
+                status: response.status,
+                message: response.message,
+            });
+        }
     };
 
     return (
@@ -257,7 +275,7 @@ const Reserva = ({ user }) => {
                             className="p-2 rounded-md bg-[#151520] text-gray-300 disabled:opacity-50"
                         />
                     </div>
-                    <div className="flex flex-col mb-4">
+                    <div className="flex flex-col mb-6">
                         <label
                             htmlFor="tractament"
                             className="mb-2 font-semibold"
@@ -272,7 +290,7 @@ const Reserva = ({ user }) => {
                                 setSelectedTractament(e.target.value)
                             }
                         >
-                            <option value="" disabled defaultValue>
+                            <option value="" disabled selected>
                                 Selecciona un tractament
                             </option>
                             {tractaments.map((tractament) => (
@@ -284,6 +302,11 @@ const Reserva = ({ user }) => {
                                 </option>
                             ))}
                         </select>
+                        <div
+                            id="errorTractament"
+                            className="text-xs text-red-500 mt-0 mb-2"
+                            role="alert"
+                        ></div>
                     </div>
                     {selectedTractament && (
                         <>
@@ -298,7 +321,14 @@ const Reserva = ({ user }) => {
                                     disabledDatesProps={disabledDates}
                                     setSelectedDate={setSelectedDate}
                                     openDays={openDays}
+                                    id="dia"
+                                    name="dia"
                                 />
+                                <div
+                                    id="errorDia"
+                                    className="text-xs text-red-500 mt-0 mb-2"
+                                    role="alert"
+                                ></div>
                             </div>
 
                             <div className="flex flex-col mb-4">
@@ -312,8 +342,11 @@ const Reserva = ({ user }) => {
                                     name="hora"
                                     id="hora"
                                     className="p-2 rounded-md bg-[#31304D] text-gray-300"
+                                    onChange={(e) =>
+                                        setSelectedHour(e.target.value)
+                                    }
                                 >
-                                    <option value="" disabled defaultValue>
+                                    <option value="" disabled selected>
                                         Selecciona una hora
                                     </option>
                                     {availableHours.map((hour) => (
@@ -322,10 +355,38 @@ const Reserva = ({ user }) => {
                                         </option>
                                     ))}
                                 </select>
+                                <div
+                                    id="errorHora"
+                                    className="text-xs text-red-500 mt-0 mb-2"
+                                    role="alert"
+                                ></div>
+                            </div>
+                            {/* Falta posar un input per poder deixar un missatge per si el client vols dir alguna cosa,no és obligatori */}
+                            <div className="flex flex-col mb-4">
+                                <label
+                                    htmlFor="missatge"
+                                    className="mb-2 font-semibold"
+                                >
+                                    Missatge (Opcional)
+                                </label>
+                                <textarea
+                                    name="missatge"
+                                    id="missatge"
+                                    className="p-2 rounded-md bg-[#31304D] text-gray-300"
+                                    placeholder="Deixa un missatge"
+                                    onChange={(e) =>
+                                        setMissatge(e.target.value)
+                                    }
+                                ></textarea>
                             </div>
                             <button
                                 type="submit"
-                                className="bg-[#161A30] border-gray-300 border-2 text-gray-300 p-2 rounded-md font-semibold hover:bg-[#B6BBC4] hover:text-[#161A30] transition-colors duration-500"
+                                className="bg-[#161A30] border-gray-300 border-2 text-gray-300 p-2 rounded-md font-semibold hover:bg-[#B6BBC4] hover:text-[#161A30] transition-colors duration-500 disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-gray-300"
+                                disabled={
+                                    !selectedTractament ||
+                                    !selectedDate ||
+                                    !selectedHour
+                                }
                             >
                                 Confirmar reserva
                             </button>

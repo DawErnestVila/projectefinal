@@ -1,0 +1,30 @@
+.flash-message {
+    position: relative;
+}
+
+.flash-message .progress-bar {
+    height: 2px;
+    background-color: #3498db; /* Color de la barra de càrrega */
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    animation: progress-bar-animation 5s linear;
+}
+
+@keyframes progress-bar-animation {
+    0% {
+        width: 100%;
+    }
+    100% {
+        width: 0%;
+    }
+}
+
+.flash-message.success .progress-bar {
+    background-color: #2ecc71; /* Color de la barra de càrrega en cas d'èxit */
+}
+
+.flash-message.error .progress-bar {
+    background-color: #e74c3c; /* Color de la barra de càrrega en cas d'error */
+}

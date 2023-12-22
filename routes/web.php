@@ -23,6 +23,7 @@ use Illuminate\Http\Request as IlluminateRequest;
 // });
 
 Route::get('/', [ClientController::class, 'index'])->name('home');
+Route::post('/', [ClientController::class, 'indexPost']);
 
 Route::get('/demanar-hora', [ClientController::class, 'demanarHoraGet'])->name('demanar-hora');
 

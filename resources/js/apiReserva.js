@@ -51,3 +51,14 @@ export function getTractamentId(data) {
         },
     }).then((response) => response.json());
 }
+
+// Store reserva
+export function storeReserva(data) {
+    return fetch(`${API_URL}/storereserva`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => response.json());
+}

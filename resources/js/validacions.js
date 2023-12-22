@@ -1,3 +1,4 @@
+//? Validacions a User.jsx del telèfon
 export const validateNum = (telefon) => {
     const errorTelefonn = document.querySelector("#errorTelefon");
 
@@ -31,6 +32,7 @@ export const validateNum = (telefon) => {
     return true;
 };
 
+//? Validacions a User.jsx dels camps de text
 export const validate = (nom, cognoms, email) => {
     const errorNom = document.querySelector("#errorNom");
     const errorCognoms = document.querySelector("#errorCognoms");
@@ -119,6 +121,58 @@ export const validate = (nom, cognoms, email) => {
     } else {
         if (errorEmail) {
             errorEmail.innerHTML = "";
+        }
+    }
+
+    return true;
+};
+
+//? Validacions a Reserva.jsx dels camps del dia i hora
+export const validateDiaHora = ({ dia, hora, tractament_id, usuari_id }) => {
+    const errorDia = document.querySelector("#errorDia");
+    const errorHora = document.querySelector("#errorHora");
+    const errorTractament = document.querySelector("#errorTractament");
+
+    if (dia === "" || dia === null || dia === undefined) {
+        if (errorDia) {
+            errorDia.innerHTML = "El dia és obligatori";
+            const dia = document.querySelector("#dia");
+            dia.focus();
+        }
+        return false;
+    } else {
+        if (errorDia) {
+            errorDia.innerHTML = "";
+        }
+    }
+
+    if (hora === "" || hora === null || hora === undefined) {
+        if (errorHora) {
+            errorHora.innerHTML = "L'hora és obligatòria";
+            const hora = document.querySelector("#hora");
+            hora.focus();
+        }
+        return false;
+    } else {
+        if (errorHora) {
+            errorHora.innerHTML = "";
+        }
+    }
+
+    if (
+        tractament_id === "" ||
+        tractament_id === null ||
+        tractament_id === undefined
+    ) {
+        if (errorTractament) {
+            errorTractament.innerHTML = "El tractament és obligatori";
+            const tractament_id = document.querySelector("#tractament_id");
+            tractament_id.focus();
+        }
+        return false;
+    } else {
+        if (errorTractament) {
+            errorTractament.innerHTML = "";
         }
     }
 

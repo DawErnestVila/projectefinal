@@ -16,6 +16,17 @@ class ClientController extends Controller
         return Inertia::render('Layout');
     }
 
+    public function indexPost(Request $request)
+    {
+        $status = $request->input('status');
+        $missatge = $request->input('message');
+
+        return Inertia::render('Layout', [
+            'status' => $status,
+            'missatge' => $missatge,
+        ]);
+    }
+
     public function demanarHoraGet()
     {
         // Si l'usuari ja existeix, torna les dades de l'usuari a la vista
