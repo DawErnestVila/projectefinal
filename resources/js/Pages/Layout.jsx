@@ -61,7 +61,6 @@ const Layout = ({ user, status, missatge }) => {
                             onClick={() => setShowFlashMessage(false)}
                         >
                             x{" "}
-                            {/* Aquí pots utilitzar un ícone de creueta o el text 'X' */}
                         </button>
                         {flashMessage.missatge}
                     </div>

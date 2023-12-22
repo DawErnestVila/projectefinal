@@ -403,7 +403,13 @@ const Reserva = ({ user }) => {
                                     !selectedTractament ||
                                     !selectedDate ||
                                     !selectedHour
-                                        ? "Has d'omplir de seleccionar un tractament, una data i una hora per poder confirmar la reserva"
+                                        ? `Et falta seleccionar ${
+                                              !selectedTractament
+                                                  ? "el tractament"
+                                                  : !selectedDate
+                                                  ? "la data"
+                                                  : "l'hora"
+                                          } per poder confirmar la reserva`
                                         : ""
                                 }
                             >

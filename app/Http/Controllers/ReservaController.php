@@ -6,7 +6,9 @@ use DateTime;
 use App\Models\Reserva;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\ReservationConfirmationMail;
 use Illuminate\Support\Facades\Validator;
 
 class ReservaController extends Controller
@@ -60,12 +62,25 @@ class ReservaController extends Controller
         ]);
 
         //TODO S'hauria d'enviar un correu al client amb la confirmació de la reserva
+        // Get the client's email address
+        $clientEmail = $reserva->client->correu;
 
+        // Check if the email address is valid
+        if (filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
+            // Send confirmation email to the client
+            Mail::to($clientEmail)->send(new ReservationConfirmationMail($reserva));
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Reserva creada correctament',
-            'data' => $reserva,
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Reserva creada correctament',
+                'data' => $reserva,
+            ]);
+        } else {
+            // Handle the case where the email address is not valid
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al enviar el correu. La direcció de correu electrònic no és vàlida.',
+            ], 400);
+        }
     }
 }

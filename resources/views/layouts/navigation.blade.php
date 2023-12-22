@@ -15,6 +15,12 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @if (auth()->user()->name == 'Professorat')
+                        <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
+                            {{ __('Afegir Alumne') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 

@@ -2,6 +2,7 @@
 
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
 use GuzzleHttp\Psr7\Request as GuzzleRequequest;
@@ -29,7 +30,13 @@ Route::get('/demanar-hora', [ClientController::class, 'demanarHoraGet'])->name('
 
 Route::post('/demanar-hora', [ClientController::class, 'demanarHoraPost'])->name('demanar-hora-post');
 
+Route::get('send-mail', [MailController::class, 'index']);
+
 Route::get('/dashboard', function () {
+
+    // if (auth()->user()->name != 'Professorat') {
+    //     dd('No tens permisos per accedir a aquesta pàgina');
+    // }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
