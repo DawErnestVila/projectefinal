@@ -350,6 +350,11 @@ const Reserva = ({ user }) => {
                                         setSelectedHour(e.target.value)
                                     }
                                     disabled={availableHours.length === 0}
+                                    title={
+                                        availableHours.length === 0
+                                            ? "No pots seleccionar una hora ja que no hi ha hores disponibles"
+                                            : ""
+                                    }
                                 >
                                     <option value="" disabled selected>
                                         {availableHours.length === 0
@@ -362,6 +367,7 @@ const Reserva = ({ user }) => {
                                         </option>
                                     ))}
                                 </select>
+
                                 <div
                                     id="errorHora"
                                     className="text-xs text-red-500 mt-0 mb-2"
@@ -392,6 +398,13 @@ const Reserva = ({ user }) => {
                                     !selectedTractament ||
                                     !selectedDate ||
                                     !selectedHour
+                                }
+                                title={
+                                    !selectedTractament ||
+                                    !selectedDate ||
+                                    !selectedHour
+                                        ? "Has d'omplir de seleccionar un tractament, una data i una hora per poder confirmar la reserva"
+                                        : ""
                                 }
                             >
                                 Confirmar reserva

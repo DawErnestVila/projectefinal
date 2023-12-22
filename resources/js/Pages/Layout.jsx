@@ -70,7 +70,7 @@ const Layout = ({ user, status, missatge }) => {
                     Perruqueria Cirviànum
                 </h1>
                 {contentComponent}
-                <span className="text-xs text-gray-200 mb-0">
+                <span className="text-xs text-gray-200 mb-24">
                     Foto d'
                     <a
                         href="https://unsplash.com/es/@awcreativeut?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash"
