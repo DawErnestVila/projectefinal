@@ -19,13 +19,16 @@ const Reserva = ({ user }) => {
     const [openDays, setOpenDays] = useState([]);
 
     const getOpenDays = async () => {
-        const response = await getHoraris();
-        const horaris = response.data;
-        const openDays = horaris.map((horari) => {
-            return horari.dia;
-        });
-        console.log(openDays);
-        setOpenDays(openDays);
+        try {
+            const response = await getHoraris();
+            const horaris = response.data;
+            const openDays = horaris.map((horari) => {
+                return horari.dia;
+            });
+            setOpenDays(openDays);
+        } catch (error) {
+            console.error("Error fetching open days:", error);
+        }
     };
 
     useEffect(() => {
@@ -54,11 +57,11 @@ const Reserva = ({ user }) => {
 
     useEffect(() => {
         // Assegura't que la funció només s'executi quan selectedDate és diferent de null
-        if (selectedDate) {
+        if (selectedDate && selectedTractament) {
             // Aquí pots cridar la funció que necessites
             getAvailableHours();
         }
-    }, [selectedDate]);
+    }, [selectedDate, selectedTractament]);
 
     const getAvailableHoursWithoutReservations = (startHour, endHour) => {
         const availableHours = [];
@@ -107,6 +110,7 @@ const Reserva = ({ user }) => {
                     const isReserved = reservesForDay.some(
                         (reserve) =>
                             reserve.horaInicial <= hour &&
+                            //! Canviar el > per >= si vols afegir 15 minuts de marge entre reserves
                             reserve.horaFinal > hour
                     );
 
@@ -116,7 +120,13 @@ const Reserva = ({ user }) => {
 
             // Actualitzar l'estat amb les hores disponibles
             console.log(availableHours);
-
+            const tractament = tractaments.find(
+                (tractament) => tractament.id == selectedTractament
+            );
+            // fitTractament(tractament, availableHours);
+            setAvailableHours(
+                obtenirHoresDisponibles(availableHours, tractament.durada)
+            );
             // // Actualitzar l'estat amb les hores disponibles
             // setAvailableHours(availableHours);
         } catch (error) {
@@ -151,34 +161,74 @@ const Reserva = ({ user }) => {
                 }
             );
 
-            function sumarHores(hora1, hora2) {
-                // Parseja les hores en minuts
-                const [hores1, minuts1] = hora1.split(":").map(Number);
-                const [hores2, minuts2] = hora2.split(":").map(Number);
-
-                // Calcula la suma en minuts
-                let sumaTotalEnMinuts =
-                    hores1 * 60 + minuts1 + (hores2 * 60 + minuts2);
-
-                // Obté les noves hores i minuts
-                const horesResultat = Math.floor(sumaTotalEnMinuts / 60);
-                const minutsResultat = sumaTotalEnMinuts % 60;
-
-                // Formata les noves hores i minuts com a cadena de text
-                const resultatFinal = `${String(horesResultat).padStart(
-                    2,
-                    "0"
-                )}:${String(minutsResultat).padStart(2, "0")}`;
-
-                return resultatFinal;
-            }
-
             return horesFinalsTractament;
         } catch (error) {
             console.error("Error fetching reserves:", error);
             return [];
         }
     };
+
+    function sumarHores(hora1, hora2) {
+        // Parseja les hores en minuts
+        const [hores1, minuts1] = hora1.split(":").map(Number);
+        const [hores2, minuts2] = hora2.split(":").map(Number);
+
+        // Calcula la suma en minuts
+        let sumaTotalEnMinuts = hores1 * 60 + minuts1 + (hores2 * 60 + minuts2);
+
+        // Obté les noves hores i minuts
+        const horesResultat = Math.floor(sumaTotalEnMinuts / 60);
+        const minutsResultat = sumaTotalEnMinuts % 60;
+
+        // Formata les noves hores i minuts com a cadena de text
+        const resultatFinal = `${String(horesResultat).padStart(
+            2,
+            "0"
+        )}:${String(minutsResultat).padStart(2, "0")}`;
+
+        return resultatFinal;
+    }
+
+    // Funció per convertir el format "hh:mm:ss" a minuts
+    function convertirHoraAMinuts(hora) {
+        const temps = hora.split(":");
+        return parseInt(temps[0]) * 60 + parseInt(temps[1]);
+    }
+
+    function obtenirHoresDisponibles(hores, duradaTractament) {
+        console.log(duradaTractament);
+        var horesDisponibles = [];
+
+        // Converteix la durada del tractament a minuts
+        var duradaMinuts = convertirHoraAMinuts(duradaTractament);
+
+        // Calcula el nombre d'intervals necessaris
+        var intervalsNecessaris = duradaMinuts / 15;
+
+        // Itera sobre les hores disponibles
+        for (var i = 0; i < hores.length; i++) {
+            if (hores[i] !== null) {
+                // Verifica si hi ha prou espai a l'array per als intervals necessaris
+                if (i + intervalsNecessaris <= hores.length) {
+                    // Verifica la disponibilitat del tractament
+                    var tractamentEncaixa = true;
+                    for (var j = 0; j < intervalsNecessaris; j++) {
+                        if (hores[i + j] === null) {
+                            tractamentEncaixa = false;
+                            break;
+                        }
+                    }
+
+                    // Emmagatzema les hores disponibles si el tractament encaixa
+                    if (tractamentEncaixa) {
+                        horesDisponibles.push(hores[i]);
+                    }
+                }
+            }
+        }
+
+        return horesDisponibles;
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -222,7 +272,7 @@ const Reserva = ({ user }) => {
                                 setSelectedTractament(e.target.value)
                             }
                         >
-                            <option value="" disabled selected>
+                            <option value="" disabled defaultValue>
                                 Selecciona un tractament
                             </option>
                             {tractaments.map((tractament) => (
@@ -263,9 +313,14 @@ const Reserva = ({ user }) => {
                                     id="hora"
                                     className="p-2 rounded-md bg-[#31304D] text-gray-300"
                                 >
-                                    <option value="1">10:00</option>
-                                    <option value="2">11:00</option>
-                                    <option value="3">12:00</option>
+                                    <option value="" disabled defaultValue>
+                                        Selecciona una hora
+                                    </option>
+                                    {availableHours.map((hour) => (
+                                        <option key={hour} value={hour}>
+                                            {hour}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <button
