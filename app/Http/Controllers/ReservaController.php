@@ -83,4 +83,23 @@ class ReservaController extends Controller
             ], 400);
         }
     }
+
+    public function getReserves()
+    {
+        $reserves = Reserve::all();
+        $response = array();
+
+        foreach ($reserves as $reserva) {
+            $response[] = [
+                'reserva' => $reserva,
+                'client' => $reserva->client,
+            ];
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'JSON received successfully',
+            'data' => $response,
+        ]);
+    }
 }

@@ -28,6 +28,8 @@ Route::post('/gethoresdisponibles', [HorariController::class, 'getHoresDisponibl
 Route::post('/getreservesdia', [ReservaController::class, 'getReservesDia'])->name('getreservesdia');
 Route::post('/gettractamentid', [TractamentController::class, 'getTractamentId'])->name('gettractamentid');
 Route::post('/storereserva', [ReservaController::class, 'storeReserva'])->name('storereserva');
+Route::get('/getreserves', [ReservaController::class, 'getReserves'])->name('getreserves');
+Route::post('/getclientbyid', [ClientController::class, 'getClientById'])->name('getclientbyid');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

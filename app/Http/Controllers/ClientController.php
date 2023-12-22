@@ -116,4 +116,31 @@ class ClientController extends Controller
             'data' => $client,
         ]);
     }
+
+    public function getClientById(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        if (json_last_error() == JSON_ERROR_NONE) {
+            $client = Client::where('id', $data['id'])->first();
+            if ($client) {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'JSON received successfully',
+                    'data' => $client,
+                ]);
+            } else {
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'JSON received successfully',
+                    'data' => false,
+                ]);
+            }
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid JSON format',
+            ], 400);
+        }
+    }
 }
