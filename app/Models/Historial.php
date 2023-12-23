@@ -18,4 +18,19 @@ class Historial extends Model
         'data_cancelacio',
         'motiu_cancelacio',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
+
+    public function tractament()
+    {
+        return $this->belongsTo(Tractament::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

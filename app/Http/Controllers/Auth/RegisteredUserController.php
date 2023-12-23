@@ -20,7 +20,19 @@ class RegisteredUserController extends Controller
      */
     public function create(): View
     {
-        return view('auth.register');
+        $users = User::all();
+
+        foreach ($users as $user) {
+            $usersWithTasks[] = [
+                "user" => $user,
+                //Vull que obtinguis el nombre de historials que te cada user: $user->historials where user_id = $user->id
+                "historials" => $user->historials->count(),
+            ];
+        }
+
+        return view('auth.register', [
+            'users' => $usersWithTasks,
+        ]);
     }
 
     /**
@@ -36,12 +48,13 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('dashboard')->with('success', 'Usuari creat correctament');
+        return redirect()->route('register')->with('success', 'Usuari creat correctament');
     }
 }

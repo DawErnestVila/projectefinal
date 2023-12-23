@@ -16,12 +16,14 @@ const manageReserves = async () => {
 
 const filterData = (e) => {
     let input = e.target;
-    let value = input.value;
+    let value = input.value.trim(); // Trim to handle whitespace
 
-    // Ara pots fer servir la variable reservesData aquí dins
-    // reservesData.filter(({ client }) => {
-    //     console.log(client.phone);
-    // });
+    // Clear the container if the input value is empty
+    if (value === "") {
+        const container = document.querySelector("#reserves");
+        container.innerHTML = "";
+        return; // Exit the function if the input is empty
+    }
 
     const elements = reservesData
         .map((element) => {
@@ -34,16 +36,80 @@ const filterData = (e) => {
     const container = document.querySelector("#reserves");
     container.innerHTML = "";
 
+    //POTS ORDERNAR PER LA DATA DE LA RESERVA ELS ELEMENTS
+    elements.sort((a, b) => {
+        const dateA = new Date(a.reserva.data);
+        const dateB = new Date(b.reserva.data);
+        return dateA - dateB;
+    });
+
     elements.forEach((element) => {
         buildReservaDom(element, container);
     });
+};
 
-    console.log(elements);
+const assignarResrva = async (e) => {
+    const reservaId = e.currentTarget.dataset.reservaId;
+    const idUsuari = document.querySelector("#user_id").value;
+    // Necessito fer una petició post a la API a `${API_URL}/assignarreserva` i que un cop s'hagi assignat la reserva, esborri l'element del DOM
+    try {
+        const response = await fetch(`${API_URL}/assignarreserva`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ reserva_id: reservaId, user_id: idUsuari }),
+        });
+        const responseJson = await response.json();
+        console.log(responseJson);
+        if (responseJson.status === "success") {
+            // Eliminar l'element del DOM
+            const element = document.querySelector(
+                `[data-reserva-id="${reservaId}"]`
+            );
+            element.classList.remove("visible");
+            setTimeout(() => {
+                element.remove();
+            }, 300);
+            //TODO Crera un missatge flash que digui que s'ha assignat la reserva
+            const flashMessage = document.querySelector("#flash-message");
+            flashMessage.classList.remove("hidden-flash");
+            flashMessage.classList.add("visible-flash");
+            flashMessage.textContent = responseJson.message;
+
+            setTimeout(() => {
+                flashMessage.classList.remove("visible-flash");
+                flashMessage.classList.add("hidden-flash");
+            }, 3000);
+
+            //TODO faltaria actualitzar l'array de reserves per treure la reserva assignada
+            const reserves = await fetch(`${API_URL}/getreserves`);
+            const reservesJson = await reserves.json();
+            reservesData = reservesJson.data;
+        } else {
+            const flashMessage = document.querySelector("#flash-message");
+            flashMessage.classList.remove("hidden-flash");
+            flashMessage.classList.add("visible-flash");
+            flashMessage.classList.add("error-flash");
+            flashMessage.textContent = responseJson.message;
+
+            setTimeout(() => {
+                flashMessage.classList.remove("visible-flash");
+                flashMessage.classList.add("hidden-flash");
+                flashMessage.classList.remove("error-flash");
+            }, 3000);
+        }
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 const buildReservaDom = (element, container) => {
     const reservaElement = document.createElement("div");
     reservaElement.classList.add("reserva");
+
+    // Afegir la ID com a atribut de l'element
+    reservaElement.dataset.reservaId = element.reserva.id;
 
     const headerElement = document.createElement("div");
     headerElement.classList.add("reserva__header");
@@ -55,7 +121,11 @@ const buildReservaDom = (element, container) => {
 
     const dateElement = document.createElement("p");
     dateElement.classList.add("reserva__date");
-    dateElement.textContent = element.reserva.data;
+
+    // Format the date as dd/mm/yyyy
+    const reservaDate = new Date(element.reserva.data);
+    const formattedDate = reservaDate.toLocaleDateString("en-GB");
+    dateElement.textContent = formattedDate;
 
     headerElement.appendChild(titleElement);
     headerElement.appendChild(dateElement);
@@ -65,11 +135,17 @@ const buildReservaDom = (element, container) => {
 
     const textElement1 = document.createElement("p");
     textElement1.classList.add("reserva__text");
-    textElement1.textContent = element.reserva.tractament_id;
+
+    // Display the name of the treatment instead of its ID
+    textElement1.textContent = element.tractament.nom;
 
     const textElement2 = document.createElement("p");
     textElement2.classList.add("reserva__text");
-    textElement2.textContent = element.reserva.hora;
+
+    // Extract only hours and minutes using a slice
+    const horaString = element.reserva.hora;
+    const formattedTime = horaString.slice(0, 5);
+    textElement2.textContent = formattedTime;
 
     bodyElement.appendChild(textElement1);
     bodyElement.appendChild(textElement2);
@@ -79,7 +155,14 @@ const buildReservaDom = (element, container) => {
 
     container.appendChild(reservaElement);
 
-    //! POSAR CLASSES AMB CSS I POSARLES AMB LES CLASSES AQUI, COM A LA SWAPI
+    // Afegir la classe per activar la transició
+    setTimeout(() => {
+        reservaElement.classList.add("visible");
+    }, 50);
+
+    reservaElement.addEventListener("click", assignarResrva);
+
+    container.appendChild(reservaElement);
 };
 
 inputTelf.addEventListener("keyup", filterData);

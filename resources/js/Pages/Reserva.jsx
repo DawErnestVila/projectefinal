@@ -12,6 +12,8 @@ import {
     storeReserva,
 } from "../apiReserva";
 
+//! FER QUE LES PROFES PUGUIN APRETAR UN BOTÓ I QUE FACI UN TOGGLE ENTRE  QUE NOMÉS ES PUGUIN FER UNA RESERVA PER CLIENT O VÀRIES.
+
 const Reserva = ({ user }) => {
     const [selectedTractament, setSelectedTractament] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null); // Nou estat per la data seleccionada

@@ -1,0 +1,66 @@
+.reserva {
+    border: 1px solid #e2e2e2;
+    border-radius: 0.375rem;
+    margin-bottom: 3rem;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    width: 50%;
+    transition: transform 0.3s, all 0.3s;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.reserva.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reserva:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.reserva__header {
+    background-color: #ffd699; /* Color pastel suau */
+    color: #333333;
+    padding: 0.75rem;
+}
+
+.reserva__title {
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.reserva__date {
+    margin: 0;
+}
+
+.reserva__body {
+    padding: 1rem;
+}
+
+.reserva__text {
+    margin: 0;
+}
+
+.flash-message {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.visible-flash {
+    opacity: 1;
+    background-color: #4caf50; /* Color de fons verd per als missatges d'èxit */
+    color: #ffffff; /* Color del text blanc per als missatges d'èxit */
+}
+
+.error-flash.visible-flash {
+    background-color: #ff6347; /* Color de fons vermell per als missatges d'error */
+}
+
+.hidden-flash {
+    opacity: 0;
+}

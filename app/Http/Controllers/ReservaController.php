@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use App\Mail\ReservationConfirmationMail;
+use App\Models\Historial;
 use Illuminate\Support\Facades\Validator;
 
 class ReservaController extends Controller
@@ -61,7 +62,6 @@ class ReservaController extends Controller
             'comentari' => $data['missatge'],
         ]);
 
-        //TODO S'hauria d'enviar un correu al client amb la confirmació de la reserva
         // Get the client's email address
         $clientEmail = $reserva->client->correu;
 
@@ -93,6 +93,7 @@ class ReservaController extends Controller
             $response[] = [
                 'reserva' => $reserva,
                 'client' => $reserva->client,
+                "tractament" => $reserva->tractament,
             ];
         }
 
@@ -100,6 +101,51 @@ class ReservaController extends Controller
             'status' => 'success',
             'message' => 'JSON received successfully',
             'data' => $response,
+        ]);
+    }
+
+    public function assignarReserva(Request $request)
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Validate the input
+        $validator = Validator::make($data, [
+            'reserva_id' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            session()->flash('error', 'Error al assignar la reserva');
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al assignar la reserva',
+                'errors' => $validator->errors(),
+            ], 400);
+        }
+
+        $reserva = Reserve::find($data['reserva_id']);
+        $tractamentId = $reserva->tractament_id;
+        $dataRes = $reserva->data;
+        $hora = $reserva->hora;
+        $clientId = $reserva->client_id;
+
+        // dd($tractamentId, $dataRes, $hora);
+
+        $historial = Historial::create([
+            "client_id" => $clientId,
+            "tractament_id" => $tractamentId,
+            "user_id" => $data['user_id'],
+            "data" => $dataRes,
+            "hora" => $hora,
+        ]);
+
+        // Ara faria eliminar la reserva de la taula reserves ja que ja està al historial i assignada a un treballador
+        Reserve::destroy($data['reserva_id']);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Reserva assignada correctament',
+            'data' => $historial,
         ]);
     }
 }

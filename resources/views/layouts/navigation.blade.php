@@ -17,8 +17,8 @@
                     </x-nav-link>
 
                     @if (auth()->user()->name == 'Professorat')
-                        <x-nav-link :href="route('register')" :active="request()->routeIs('register')">
-                            {{ __('Afegir Alumne') }}
+                        <x-nav-link :href="route('gestionar-alumnes')" :active="request()->routeIs('register')">
+                            {{ __('Gestionar Alumnes') }}
                         </x-nav-link>
                     @endif
                 </div>
