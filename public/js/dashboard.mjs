@@ -120,12 +120,13 @@ const buildReservaDom = (element, container) => {
     titleElement.textContent = `${element.client.nom} ${element.client.cognoms}`;
 
     const dateElement = document.createElement("p");
-    dateElement.classList.add("reserva__date");
+    dateElement.classList.add("reserva__text-label");
+    dateElement.textContent = "Data: ";
 
     // Format the date as dd/mm/yyyy
     const reservaDate = new Date(element.reserva.data);
     const formattedDate = reservaDate.toLocaleDateString("en-GB");
-    dateElement.textContent = formattedDate;
+    dateElement.textContent += formattedDate;
 
     headerElement.appendChild(titleElement);
     headerElement.appendChild(dateElement);
@@ -134,21 +135,35 @@ const buildReservaDom = (element, container) => {
     bodyElement.classList.add("reserva__body");
 
     const textElement1 = document.createElement("p");
-    textElement1.classList.add("reserva__text");
+    textElement1.classList.add("reserva__text-label");
+    textElement1.textContent = "Tractament: ";
 
     // Display the name of the treatment instead of its ID
-    textElement1.textContent = element.tractament.nom;
+    textElement1.textContent += element.tractament.nom;
 
     const textElement2 = document.createElement("p");
-    textElement2.classList.add("reserva__text");
+    textElement2.classList.add("reserva__text-label");
+    textElement2.textContent = "Hora: ";
 
     // Extract only hours and minutes using a slice
     const horaString = element.reserva.hora;
     const formattedTime = horaString.slice(0, 5);
-    textElement2.textContent = formattedTime;
+    textElement2.textContent += formattedTime;
 
     bodyElement.appendChild(textElement1);
     bodyElement.appendChild(textElement2);
+    if (element.reserva.comentari) {
+        const messageLabelElement = document.createElement("p");
+        messageLabelElement.classList.add("reserva__text-label");
+        messageLabelElement.textContent = "Missatge: ";
+
+        const messageElement = document.createElement("p");
+        messageElement.classList.add("reserva__text");
+        messageElement.textContent = element.reserva.comentari;
+
+        bodyElement.appendChild(messageLabelElement);
+        bodyElement.appendChild(messageElement);
+    }
 
     reservaElement.appendChild(headerElement);
     reservaElement.appendChild(bodyElement);

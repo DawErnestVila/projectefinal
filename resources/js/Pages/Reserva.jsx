@@ -249,7 +249,7 @@ const Reserva = ({ user }) => {
         const correcte = validateDiaHora(reserva);
         if (correcte) {
             const response = await storeReserva(reserva);
-            Inertia.post("/", {
+            await Inertia.post("/", {
                 status: response.status,
                 message: response.message,
             });
