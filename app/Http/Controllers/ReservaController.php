@@ -9,7 +9,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use App\Mail\ReservationConfirmationMail;
+use App\Models\Client;
 use App\Models\Historial;
+use App\Models\Tractament;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class ReservaController extends Controller
@@ -132,9 +135,9 @@ class ReservaController extends Controller
         // dd($tractamentId, $dataRes, $hora);
 
         $historial = Historial::create([
-            "client_id" => $clientId,
-            "tractament_id" => $tractamentId,
-            "user_id" => $data['user_id'],
+            "client_name" => Client::find($clientId)->nom,
+            "tractament_name" => Tractament::find($tractamentId)->nom,
+            "user_name" => User::find($data['user_id'])->name,
             "data" => $dataRes,
             "hora" => $hora,
         ]);

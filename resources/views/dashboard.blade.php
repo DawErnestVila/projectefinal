@@ -19,6 +19,17 @@
             </div>
         </div>
     @endif
+    @if (session('error'))
+        <div class="py-15 mt-6">
+            <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-red-800 font-black text-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="alert alert-success my-7 text-center" role="alert">
+                        {{ session('error') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 
     <div class="py-15 mt-6">
         <div class="max-w-xl mx-auto sm:px-6 lg:px-8">

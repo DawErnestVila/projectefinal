@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Historial;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -21,14 +22,21 @@ class RegisteredUserController extends Controller
     public function create(): View
     {
         $users = User::all();
+        $historialsGroupedByUser = Historial::all()->groupBy('user_name');
+
+        $usersWithTasks = [];
 
         foreach ($users as $user) {
+            $userHistorials = $historialsGroupedByUser->get($user->name, []);
+
+            $historialsCount = count($userHistorials);
+
             $usersWithTasks[] = [
                 "user" => $user,
-                //Vull que obtinguis el nombre de historials que te cada user: $user->historials where user_id = $user->id
-                "historials" => $user->historials->count(),
+                "historials" => $historialsCount,
             ];
         }
+        // dd($usersWithTasks);
 
         return view('auth.register', [
             'users' => $usersWithTasks,
@@ -55,6 +63,6 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('register')->with('success', 'Usuari creat correctament');
+        return redirect()->route('gestionar-alumnes')->with('success', 'Alumne creat correctament');
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\DeleteUserController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -63,7 +64,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware(['professorat'])->group(function () {
     Route::get('gestionar-alumnes', [RegisteredUserController::class, 'create'])
         ->name('gestionar-alumnes');
-
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
     Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
+    Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
 });

@@ -10,9 +10,9 @@ class Historial extends Model
     use HasFactory;
 
     protected $fillable = [
-        'client_id',
-        'tractament_id',
-        'user_id',
+        'client_name',
+        'tractament_name',
+        'user_name',
         'data',
         'hora',
         'data_cancelacio',

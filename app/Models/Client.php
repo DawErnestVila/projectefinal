@@ -22,4 +22,9 @@ class Client extends Model
     {
         return $this->hasMany(Reserve::class);
     }
+
+    public function historial()
+    {
+        return $this->hasMany(Historial::class);
+    }
 }

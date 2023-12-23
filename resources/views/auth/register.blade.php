@@ -10,6 +10,17 @@
             </div>
         </div>
     @endif
+    @if (session('error'))
+        <div class="py-15 mt-6">
+            <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-red-800 font-black text-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="alert alert-success my-7 text-center" role="alert">
+                        {{ session('error') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -73,10 +84,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-4xl font-black text-center mb-7">Eliminar Alumnes</h1>
+                    <h1 class="text-4xl font-black text-center mb-7">Gestionar Alumnes</h1>
                     <div class="mx-auto">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+                            <table class="w-full text-left rtl:text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-6 py-3">
@@ -105,6 +116,7 @@
                                                     {{ $user['user']->email }}
                                                 </td>
                                                 <td class="px-6 py-4">
+
                                                     {{ $user['historials'] }}
                                                 </td>
                                                 <td class="px-6 py-4">
@@ -162,7 +174,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

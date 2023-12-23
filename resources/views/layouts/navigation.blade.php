@@ -6,7 +6,9 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
+                        <img src="{{ asset('images/logo.jpg') }}" alt="Logo"
+                            class="block h-9 w-auto fill-current text-gray-800">
                     </a>
                 </div>
 
@@ -17,8 +19,11 @@
                     </x-nav-link>
 
                     @if (auth()->user()->name == 'Professorat')
-                        <x-nav-link :href="route('gestionar-alumnes')" :active="request()->routeIs('register')">
+                        <x-nav-link :href="route('gestionar-alumnes')" :active="request()->routeIs('gestionar-alumnes')">
                             {{ __('Gestionar Alumnes') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('historial-reserves')" :active="request()->routeIs('historial-reserves')">
+                            {{ __('Historial Reserves') }}
                         </x-nav-link>
                     @endif
                 </div>
@@ -83,6 +88,12 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('gestionar-alumnes')" :active="request()->routeIs('gestionar-alumnes')">
+                {{ __('Gestionar Alumnes') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('historial-reserves')" :active="request()->routeIs('historial-reserves')">
+                {{ __('Historial Reserves') }}
             </x-responsive-nav-link>
         </div>
 
