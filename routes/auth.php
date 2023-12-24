@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\DeleteUserController;
 use App\Http\Controllers\Auth\PasswordController;
@@ -67,4 +68,5 @@ Route::middleware(['professorat'])->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
     Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
     Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
+    Route::put('/user/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.user.status');
 });

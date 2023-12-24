@@ -35,15 +35,13 @@ const MyNewDatePicker = ({ disabledDatesProps, setSelectedDate, openDays }) => {
                     });
                 },
             ],
-            locale: {
-                ...Spanish,
-                firstDayOfWeek: 1,
-            },
             onChange: function (selectedDates, dateStr, instance) {
                 setSelectedDate(dateStr);
             },
             dateFormat: "d/m/Y",
             locale: {
+                ...Spanish,
+                firstDayOfWeek: 1,
                 weekdays: {
                     shorthand: ["Dg", "Dl", "Dm", "Dx", "Dj", "Dv", "Ds"],
                     longhand: [

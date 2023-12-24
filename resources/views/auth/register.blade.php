@@ -120,14 +120,31 @@
                                                     {{ $user['historials'] }}
                                                 </td>
                                                 <td class="px-6 py-4">
-                                                    <x-danger-button x-data=""
-                                                        x-on:click.prevent="
-                                                        if (confirm('{{ __('Estàs segur de que vols aliminar aquest alumne?') }}')) {
-                                                            $dispatch('open-modal', 'confirm-user-deletion-{{ $user['user']->id }}');
-                                                        }
-                                                    ">
-                                                        {{ __('Eliminar Alumne') }}
-                                                    </x-danger-button>
+                                                    <div class="flex space-x-2">
+                                                        <form method="post"
+                                                            action="{{ route('toggle.user.status', $user['user']) }}">
+                                                            @csrf
+                                                            @method('put')
+
+                                                            <x-danger-button type="submit"
+                                                                class="{{ $user['user']->habilitat ? 'bg-orange-500 hover:bg-orange-700' : 'bg-green-500 hover:bg-green-700' }} text-white">
+                                                                @if ($user['user']->habilitat)
+                                                                    {{ __('Deshabilitar Alumne') }}
+                                                                @else
+                                                                    {{ __('Habilitar Alumne') }}
+                                                                @endif
+                                                            </x-danger-button>
+                                                        </form>
+
+                                                        <x-danger-button x-data=""
+                                                            x-on:click.prevent="
+                                                            if (confirm('{{ __('Estàs segur de que vols aliminar aquest alumne?') }}')) {
+                                                                $dispatch('open-modal', 'confirm-user-deletion-{{ $user['user']->id }}');
+                                                            }
+                                                            ">
+                                                            {{ __('Eliminar Alumne') }}
+                                                        </x-danger-button>
+                                                    </div>
 
                                                     <x-modal :name="'confirm-user-deletion-' . $user['user']->id" :show="request()->routeIs('delete.user', $user['user'])">
                                                         <form method="post" action="{{ route('delete.user') }}"
