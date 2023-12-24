@@ -55,7 +55,7 @@ class HistorialController extends Controller
         }
 
 
-        $historials = $historialsQuery->get();
+        $historials = $historialsQuery->orderBy('data', 'desc')->get();
 
 
         return response()->json([
