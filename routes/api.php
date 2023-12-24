@@ -1,12 +1,14 @@
 <?php
 
+use App\Models\Historial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\HorariController;
+use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\TractamentController;
 use App\Http\Controllers\DiesDeshabilitatController;
-use App\Http\Controllers\ReservaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +33,7 @@ Route::post('/storereserva', [ReservaController::class, 'storeReserva'])->name('
 Route::get('/getreserves', [ReservaController::class, 'getReserves'])->name('getreserves');
 Route::post('/getclientbyid', [ClientController::class, 'getClientById'])->name('getclientbyid');
 Route::post('/assignarreserva', [ReservaController::class, 'assignarReserva'])->name('assignarreserva');
+Route::post('/getfilteredhistorial', [HistorialController::class, 'getFilteredHistorial'])->name('getfilteredhistorial');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

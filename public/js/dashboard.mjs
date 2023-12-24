@@ -71,7 +71,7 @@ const assignarResrva = async (e) => {
             setTimeout(() => {
                 element.remove();
             }, 300);
-            //TODO Crera un missatge flash que digui que s'ha assignat la reserva
+
             const flashMessage = document.querySelector("#flash-message");
             flashMessage.classList.remove("hidden-flash");
             flashMessage.classList.add("visible-flash");
@@ -82,7 +82,6 @@ const assignarResrva = async (e) => {
                 flashMessage.classList.add("hidden-flash");
             }, 3000);
 
-            //TODO faltaria actualitzar l'array de reserves per treure la reserva assignada
             const reserves = await fetch(`${API_URL}/getreserves`);
             const reservesJson = await reserves.json();
             reservesData = reservesJson.data;

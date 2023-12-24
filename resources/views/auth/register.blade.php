@@ -1,4 +1,18 @@
 <x-app-layout>
+    <x-slot name="header">
+        <div class="flex justify-evenly">
+            <h2 class="font-semibold  text-gray-800 leading-tight">
+                <a href="#afegir" class="hover:underline focus:underline">
+                    {{ __('Afegir Alumne') }}
+                </a>
+            </h2>
+            <h2 class="font-semibold  text-gray-800 leading-tight">
+                <a href="#gestionar" class="hover:underline focus:underline">
+                    {{ __('Gestionar Alumnes') }}
+                </a>
+            </h2>
+        </div>
+    </x-slot>
     @if (session('success'))
         <div class="py-15 mt-6">
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
@@ -25,7 +39,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-4xl font-black text-center mb-7">Afegir Alumne</h1>
+                    <h1 class="text-4xl font-black text-center mb-7" id="afegir">Afegir Alumne</h1>
                     <div class="mx-auto">
                         <div class="w-1/3 mx-auto">
                             <form method="POST" action="{{ route('register') }}">
@@ -84,10 +98,15 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 class="text-4xl font-black text-center mb-7">Gestionar Alumnes</h1>
+                    <h1 class="text-4xl font-black text-center mb-7" id="gestionar">Gestionar Alumnes</h1>
                     <div class="mx-auto">
+                        <div class="mx-auto mb-4 flex-col flex w-1/3">
+                            <x-input-label for="searchInput">Filtrar per Alumne</x-input-label>
+                            <x-text-input type="text" id="searchInput" placeholder="Cerca per nom"
+                                class="rounded-md" />
+                        </div>
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-left rtl:text-right text-gray-500">
+                            <table id="userTable" class="w-full text-left rtl:text-right text-gray-500">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                     <tr>
                                         <th scope="col" class="px-6 py-3">
@@ -184,4 +203,32 @@
             </div>
         </div>
     </div>
+    <script>
+        function filterTable() {
+            let input, filter, table, tbody, tr, td, i, txtValue;
+            input = document.getElementById("searchInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("userTable");
+            tbody = table.getElementsByTagName("tbody")[0];
+            tr = tbody.getElementsByTagName("tr");
+
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("th")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+        // Afegir l'esdeveniment input per fer la cerca dinàmica
+        document.getElementById("searchInput").addEventListener("input", filterTable);
+    </script>
+
+
+
 </x-app-layout>
