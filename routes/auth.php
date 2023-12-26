@@ -13,6 +13,8 @@ use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use App\Http\Controllers\HorariController;
+use App\Http\Controllers\TractamentController;
 
 Route::middleware('guest')->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
@@ -68,5 +70,9 @@ Route::middleware(['professorat'])->group(function () {
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
     Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
     Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
+    Route::get('/gestionar-horaris', [HorariController::class, 'gestionarHoraris'])->name('gestionar-horaris');
+    Route::get('/gestionar-tractaments', [TractamentController::class, 'gestionarTractaments'])->name('gestionar-tractaments');
+    Route::put('/editar-tractament', [TractamentController::class, 'editarTractament'])->name('editar-tractament');
+    Route::post('/crear-tractament', [TractamentController::class, 'crearTractament'])->name('crear-tractament');
     Route::put('/user/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.user.status');
 });

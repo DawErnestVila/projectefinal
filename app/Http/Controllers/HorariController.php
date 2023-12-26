@@ -36,4 +36,10 @@ class HorariController extends Controller
             'data' => $horaris,
         ]);
     }
+
+    public function gestionarHoraris()
+    {
+        dd('hola');
+        $horaris = Horari::all();
+    }
 }

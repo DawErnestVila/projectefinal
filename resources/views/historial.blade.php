@@ -155,7 +155,7 @@
 
                             <!-- Botó per realitzar la cerca -->
                             <button onclick="realitzarCerca()"
-                                class="px-4 py-2 bg-blue-500 text-white rounded mt-2">Cerca</button>
+                                class="px-4 py-2 bg-blue-500 hover:bg-blue-700 transition-colors duration-200 text-white rounded mt-2">Cerca</button>
                         </div>
                     </div>
 

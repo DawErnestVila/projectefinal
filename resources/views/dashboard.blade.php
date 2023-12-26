@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Reserves') }}
         </h2>
     </x-slot>
 
@@ -33,7 +33,7 @@
 
     <div class="py-15 mt-6">
         <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
-            <div class="font-black overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="font-black overflow-hidden sm:rounded-lg">
                 <div id="flash-message" class="alert alert-success my-7 text-center"></div>
             </div>
         </div>

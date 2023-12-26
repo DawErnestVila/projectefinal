@@ -34,6 +34,7 @@ Route::get('/getreserves', [ReservaController::class, 'getReserves'])->name('get
 Route::post('/getclientbyid', [ClientController::class, 'getClientById'])->name('getclientbyid');
 Route::post('/assignarreserva', [ReservaController::class, 'assignarReserva'])->name('assignarreserva');
 Route::post('/getfilteredhistorial', [HistorialController::class, 'getFilteredHistorial'])->name('getfilteredhistorial');
+Route::post('/deleetetractament', [TractamentController::class, 'deleteTractament'])->name('deleetetractament');
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

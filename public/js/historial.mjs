@@ -63,7 +63,6 @@ const realitzarCerca = async () => {
             tdData.textContent = element.data;
             tdData.setAttribute("class", "px-6 py-4");
             const tdHora = document.createElement("td");
-            //Ve amb format yyyy-mm-dd i el vull en format dd/mm/yyyy
             const dataFormat = tdData.textContent.split("-");
             tdData.textContent =
                 dataFormat[2] + "/" + dataFormat[1] + "/" + dataFormat[0];
