@@ -97,8 +97,8 @@ class TractamentController extends Controller
             [
                 'nom' => 'required',
                 'descripcio' => 'required',
-                'hores' => 'required|numeric|min:0|max:23', // Asumint que hores és un nombre entre 0 i 23
-                'minuts' => 'required|numeric|min:0|max:59', // Asumint que minuts és un nombre entre 0 i 59
+                'hores' => 'required|numeric|min:0|max:23',
+                'minuts' => 'required|numeric|min:0|max:59',
             ]
         );
 
@@ -115,6 +115,6 @@ class TractamentController extends Controller
         ]);
 
 
-        return redirect()->route('gestionar-tractaments')->with('success', 'Tractament creat amb èxit');
+        return redirect()->route('gestionar-tractaments')->with('success', 'El tractament ' . $request->nom . " s'ha creat amb èxit");
     }
 }
