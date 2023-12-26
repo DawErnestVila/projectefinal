@@ -19,6 +19,8 @@
         </div>
     </x-slot>
 
+    <link rel="stylesheet" href="{{ asset('css/reserves.css') }}">
+
     @if (session('success'))
         <div class="py-15 mt-6">
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
@@ -88,7 +90,8 @@
                                                 {{ substr($tractament->durada, 0, 5) }}h
                                             </td>
                                             <td class="px-6 py-4">
-                                                <button id="edita-tractament" data-tractament-id="{{ $tractament->id }}"
+                                                <button id="edita-tractament"
+                                                    data-tractament-id="{{ $tractament->id }}"
                                                     class="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-blue-300">
                                                     <span
                                                         class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0">
@@ -178,7 +181,6 @@
                         <div class="w-1/3 mx-auto">
                             <form method="POST" action="{{ route('crear-tractament') }}">
                                 @csrf
-                                <input type="hidden" name="tractament_id" id="tractament_id">
 
                                 <!-- Nom -->
                                 <div class="mb-4">
@@ -186,6 +188,9 @@
                                     <input id="nom"
                                         class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
                                         type="text" name="nom" value="{{ old('nom') }}" required>
+                                    @error('nom')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <!-- Descripcio -->
@@ -194,6 +199,9 @@
                                     <input id="descripcio"
                                         class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
                                         type="text" name="descripcio" value="{{ old('descripcio') }}" required>
+                                    @error('descripcio')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
 
                                 <!-- Durada -->
@@ -202,17 +210,23 @@
                                         <label for="hores" class="text-gray-700 text-sm">Hores</label>
                                         <input id="hores"
                                             class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
-                                            min="0" type="number" name="hores"
+                                            min="0" max="23" type="number" name="hores"
                                             value="{{ old('hores') }}" required>
+                                        @error('hores')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
 
                                     <span class="mx-2"></span>
 
                                     <div class="flex-1">
                                         <label for="minuts" class="text-gray-700 text-sm">Minuts</label>
-                                        <input id="minuts" min="0"
+                                        <input id="minuts" min="0" max="59"
                                             class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
                                             type="number" name="minuts" value="{{ old('minuts') }}" required>
+                                        @error('minuts')
+                                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                 </div>
 

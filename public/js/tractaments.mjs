@@ -40,7 +40,7 @@ document.querySelectorAll("#edita-tractament").forEach(function (button) {
 
 //Eliminar tractament
 document
-    .querySelectorAll("#eliminar-tractament")
+    .querySelector("#eliminar-tractament")
     .addEventListener("click", async () => {
         const tractamentId = document.querySelector("#tractament_id").value;
         try {

@@ -150,6 +150,12 @@
                 <x-responsive-nav-link :href="route('historial-reserves')" :active="request()->routeIs('historial-reserves')">
                     {{ __('Historial Reserves') }}
                 </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('gestionar-horaris')" :active="request()->routeIs('gestionar-horaris')">
+                    {{ __('Gestionar Horaris') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('gestionar-tractaments')" :active="request()->routeIs('gestionar-tractaments')">
+                    {{ __('Gestionar Tractaments') }}
+                </x-responsive-nav-link>
             @endif
         </div>
 

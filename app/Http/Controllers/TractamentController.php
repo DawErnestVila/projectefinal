@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Horari;
+use App\Models\Reserve;
 use App\Models\Tractament;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class TractamentController extends Controller
 {
@@ -64,10 +66,55 @@ class TractamentController extends Controller
 
     public function deleteTractament(Request $request)
     {
-        $tractament = Tractament::where('id', $request->id)->first();
+        $data = json_decode($request->getContent(), true);
+
+        $tractament = Tractament::where('id', $data['tractament_id'])->first();
+
+        $reserves = Reserve::where('tractament_id', $tractament->id)->get();
+
+
+        if ($reserves) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No es pot eliminar el tractament perquè hi ha reserves assignades',
+                'data' => $tractament,
+            ]);
+        }
 
         $tractament->delete();
 
-        return redirect()->route('gestionarTractaments');
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Tractament eliminat correctament',
+            'data' => $tractament,
+        ]);
+    }
+
+    public function crearTractament(Request $request)
+    {
+
+        $request->validate(
+            [
+                'nom' => 'required',
+                'descripcio' => 'required',
+                'hores' => 'required|numeric|min:0|max:23', // Asumint que hores és un nombre entre 0 i 23
+                'minuts' => 'required|numeric|min:0|max:59', // Asumint que minuts és un nombre entre 0 i 59
+            ]
+        );
+
+        $nom = $request->nom;
+        $descripcio = $request->descripcio;
+        $hores = str_pad($request->hores, 2, '0', STR_PAD_LEFT);
+        $minuts = str_pad($request->minuts, 2, '0', STR_PAD_LEFT);
+        $duracio = $hores . ':' . $minuts;
+
+        $tractament = Tractament::create([
+            'nom' => $nom,
+            'descripcio' => $descripcio,
+            'durada' => $duracio,
+        ]);
+
+
+        return redirect()->route('gestionar-tractaments')->with('success', 'Tractament creat amb èxit');
     }
 }
