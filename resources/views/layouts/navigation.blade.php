@@ -89,7 +89,7 @@
                 </button>
 
                 <div id="profile-menu-content"
-                    class="hidden absolute top-full mt-2 left-0 border border-gray-400 bg-white rounded-md">
+                    class="hidden absolute top-12 left-4 border border-gray-400 bg-white rounded-md">
                     <a href="{{ route('profile.edit') }}"
                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md">Profile</a>
 
