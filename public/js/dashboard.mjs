@@ -80,6 +80,7 @@ const assignarResrva = async (e) => {
             setTimeout(() => {
                 flashMessage.classList.remove("visible-flash");
                 flashMessage.classList.add("hidden-flash");
+                flashMessage.innerHTML = "";
             }, 3000);
 
             const reserves = await fetch(`${API_URL}/getreserves`);
@@ -96,6 +97,7 @@ const assignarResrva = async (e) => {
                 flashMessage.classList.remove("visible-flash");
                 flashMessage.classList.add("hidden-flash");
                 flashMessage.classList.remove("error-flash");
+                flashMessage.innerHTML = "";
             }, 3000);
         }
     } catch (error) {

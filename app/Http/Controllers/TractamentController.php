@@ -72,8 +72,7 @@ class TractamentController extends Controller
 
         $reserves = Reserve::where('tractament_id', $tractament->id)->get();
 
-
-        if ($reserves) {
+        if ($reserves->count() > 0) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'No es pot eliminar el tractament perquè hi ha reserves assignades',
