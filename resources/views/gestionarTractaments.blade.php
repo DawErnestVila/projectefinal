@@ -210,8 +210,8 @@
                                         <label for="hores" class="text-gray-700 text-sm">Hores</label>
                                         <input id="hores"
                                             class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
-                                            min="0" max="23" type="number" name="hores"
-                                            value="{{ old('hores') }}" required>
+                                            min="0" max="23" value="0" type="number"
+                                            name="hores" value="{{ old('hores') }}" required>
                                         @error('hores')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                         @enderror
@@ -221,7 +221,7 @@
 
                                     <div class="flex-1">
                                         <label for="minuts" class="text-gray-700 text-sm">Minuts</label>
-                                        <input id="minuts" min="0" max="59"
+                                        <input id="minuts" min="0" max="59" value="0"
                                             class="block mt-1 w-full border border-gray-300 rounded-md p-2.5"
                                             type="number" name="minuts" value="{{ old('minuts') }}" required>
                                         @error('minuts')

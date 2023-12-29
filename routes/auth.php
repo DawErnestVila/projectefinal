@@ -71,6 +71,7 @@ Route::middleware(['professorat'])->group(function () {
     Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
     Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
     Route::get('/gestionar-horaris', [HorariController::class, 'gestionarHoraris'])->name('gestionar-horaris');
+    Route::put('/actualizar-horaris', [HorariController::class, 'actualizarHoraris'])->name('actualitza-horaris');
     Route::get('/gestionar-tractaments', [TractamentController::class, 'gestionarTractaments'])->name('gestionar-tractaments');
     Route::put('/editar-tractament', [TractamentController::class, 'editarTractament'])->name('editar-tractament');
     Route::post('/crear-tractament', [TractamentController::class, 'crearTractament'])->name('crear-tractament');
