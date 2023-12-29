@@ -44,6 +44,102 @@
         </div>
     @endif
 
+    <div class="py-12 bg-gray-100">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900">
+                    <h1 id="historial" class="text-4xl font-black text-center mb-7">Dies de Festa</h1>
+                    <form action="{{ route('actualitzar-dies-deshabilitats') }}" method="POST">
+                        @csrf
+                        <div class="mx-auto">
+                            <div class="flex flex-col items-center space-y-4">
+                                <div class="relative w-full overflow-x-auto shadow-md ">
+                                    <x-flatpickr name="dates" :config="[
+                                        'dateFormat' => 'd/m/Y',
+                                        'locale' => [
+                                            'firstDayOfWeek' => 1,
+                                            'weekdays' => [
+                                                'shorthand' => ['Dg', 'Dl', 'Dm', 'Dx', 'Dj', 'Dv', 'Ds'],
+                                                'longhand' => [
+                                                    'Diumenge',
+                                                    'Dilluns',
+                                                    'Dimarts',
+                                                    'Dimecres',
+                                                    'Dijous',
+                                                    'Divendres',
+                                                    'Dissabte',
+                                                ],
+                                            ],
+                                            'months' => [
+                                                'shorthand' => [
+                                                    'Gen',
+                                                    'Feb',
+                                                    'Mar',
+                                                    'Abr',
+                                                    'Maig',
+                                                    'Juny',
+                                                    'Jul',
+                                                    'Ago',
+                                                    'Set',
+                                                    'Oct',
+                                                    'Nov',
+                                                    'Des',
+                                                ],
+                                                'longhand' => [
+                                                    'Gener',
+                                                    'Febrer',
+                                                    'Març',
+                                                    'Abril',
+                                                    'Maig',
+                                                    'Juny',
+                                                    'Juliol',
+                                                    'Agost',
+                                                    'Setembre',
+                                                    'Octubre',
+                                                    'Novembre',
+                                                    'Desembre',
+                                                ],
+                                            ],
+                                        ],
+                                        'disableMobile' => true,
+                                        'mode' => 'multiple',
+                                        'minDate' => 'today',
+                                        'defaultDate' => $diesDeshabilitats,
+                                    ]" />
+                                </div>
+                                <button type="submit"
+                                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-3">
+                                    Actualizar
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const flatpickrInstance = flatpickr("#flatpickr", {
+                dateFormat: 'd/m/Y',
+                locale: {
+                    // Configuració de la localització
+                },
+                disableMobile: true,
+                mode: 'multiple',
+                minDate: 'today',
+                defaultDate: $diesDeshabilitats,
+                onChange: function(selectedDates, dateStr, instance) {
+                    // Quan les dates seleccionades canviïn, actualitza un camp ocult amb les dates seleccionades
+                    document.getElementById('selected-dates').value = selectedDates.map(date => date
+                        .toLocaleDateString()).join(',');
+                }
+            });
+        });
+    </script>
+
+
     <div class="py-12" id="tractaments">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -118,5 +214,8 @@
             </div>
         </div>
     </div>
+    <x-flatpickr::style />
+    <x-flatpickr::script />
+
     <script src="{{ asset('js/horaris.mjs') }}"></script>
 </x-app-layout>

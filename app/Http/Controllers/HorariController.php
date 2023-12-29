@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DiesDeshabilitat;
 use DateTime;
+use Carbon\Carbon;
 use App\Models\Horari;
+use App\Models\Reserve;
 use Illuminate\Http\Request;
 
 class HorariController extends Controller
@@ -37,8 +40,16 @@ class HorariController extends Controller
     public function gestionarHoraris()
     {
         $horaris = Horari::all();
+        $diesDeshabilitats = DiesDeshabilitat::all()->pluck('data')->toArray();
+        $dates = [];
+        foreach ($diesDeshabilitats as $data) {
+            $dateFromFormat = DateTime::createFromFormat('Y-m-d', $data);
+            $dates[] = $dateFromFormat->format('d/m/Y');
+        }
+        // dd($dates);
         return view('gestionarHoraris', [
             'horaris' => $horaris,
+            'diesDeshabilitats' => $dates,
         ]);
     }
 
@@ -47,12 +58,22 @@ class HorariController extends Controller
         $request->validate([
             'dies' => 'required|array',
             'hores.*.hora_obertura' => 'nullable|date_format:H:i',
-            'hores.*.hora_tancament' => 'nullable|date_format:H:i',
+            'hores.*.hora_tancament' => 'nullable|date_format:H:i|after:hores.*.hora_obertura',
         ]);
         $dies = $request->dies;
         $hores = $request->hores;
-
         $diesABorrar = Horari::whereNotIn('dia', $dies)->pluck('dia');
+
+        $reserves = Reserve::all();
+        foreach ($reserves as $reserva) {
+            $data = $reserva->data;
+            $dateFromFormat = DateTime::createFromFormat('Y-m-d', $data);
+            // Afaga el numero del dia de la setmana
+            $dia = $dateFromFormat->format('N');
+            if (in_array($dia, $diesABorrar->toArray())) {
+                return redirect()->route('gestionar-horaris')->with('error', 'No es pot eliminar un dia que té reserves');
+            }
+        }
 
         Horari::whereIn('dia', $diesABorrar)->delete();
 
