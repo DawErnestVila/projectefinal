@@ -69,6 +69,7 @@ Route::middleware(['professorat'])->group(function () {
     Route::get('gestionar-alumnes', [RegisteredUserController::class, 'create'])
         ->name('gestionar-alumnes');
     Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
     Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
     Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
     Route::get('/gestionar-horaris', [HorariController::class, 'gestionarHoraris'])->name('gestionar-horaris');
