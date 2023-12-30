@@ -66,27 +66,27 @@ class TractamentController extends Controller
 
     public function deleteTractament(Request $request)
     {
+
         $data = json_decode($request->getContent(), true);
 
         $tractament = Tractament::where('id', $data['tractament_id'])->first();
 
-        $reserves = Reserve::where('tractament_id', $tractament->id)->get();
+        if ($tractament) {
+            // Canvia l'estat del tractament
+            $tractament->actiu = !$tractament->actiu;
+            $tractament->save();
 
-        if ($reserves->count() > 0) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'No es pot eliminar el tractament perquè hi ha reserves assignades',
+                'status' => 'success',
+                'message' => 'Estat del tractament canviat correctament',
                 'data' => $tractament,
             ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No s\'ha trobat cap tractament amb aquest ID',
+            ]);
         }
-
-        $tractament->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Tractament eliminat correctament',
-            'data' => $tractament,
-        ]);
     }
 
     public function crearTractament(Request $request)

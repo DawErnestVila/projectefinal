@@ -43,7 +43,10 @@ const Reserva = ({ user }) => {
         const fetchData = async () => {
             try {
                 const response = await getTractaments();
-                setTractaments(response.data);
+                const tractamentsActius = response.data.filter(
+                    (tractament) => tractament.actiu
+                );
+                setTractaments(tractamentsActius);
                 const horarisResp = await getHoraris();
                 setHoraris(horarisResp.data);
                 const disabledDatesResp = await getDiesDeshabilitats();

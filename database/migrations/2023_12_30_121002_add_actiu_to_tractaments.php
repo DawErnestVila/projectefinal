@@ -11,20 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('dies_deshabilitats', function (Blueprint $table) {
-            if (Schema::hasColumn('dies_deshabilitats', 'motiu')) {
-                $table->dropColumn('motiu');
-            }
+        Schema::table('tractaments', function (Blueprint $table) {
+            $table->boolean('actiu')->default(true)->after('durada');
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::table('dies_deshabilitats', function (Blueprint $table) {
-            //
+        Schema::table('tractaments', function (Blueprint $table) {
+            $table->dropColumn('actiu');
         });
     }
 };

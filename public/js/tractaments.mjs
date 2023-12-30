@@ -1,4 +1,5 @@
 const API_URL = "http://localhost/api";
+
 // Afegeix un esdeveniment de clic a tots els elements amb l'ID 'edita-tractament'
 document.querySelectorAll("#edita-tractament").forEach(function (button) {
     button.addEventListener("click", function () {
@@ -17,7 +18,21 @@ document.querySelectorAll("#edita-tractament").forEach(function (button) {
         );
 
         // Obté tots els elements td dins la fila
-        const [nom, descripcio, durada, boto] = fila.querySelectorAll("td");
+        const [nom, descripcio, durada, estat, boto] =
+            fila.querySelectorAll("td");
+
+        // Canviar el text del botó en funció de l'estat del tractament
+        const botoEditar = document.querySelector("#toggle-tractament-btn");
+
+        if (estat.textContent.trim() === "Actiu") {
+            botoEditar.innerHTML = "Desactivar Tractament";
+            botoEditar.classList.remove("bg-green-500", "hover:bg-green-700");
+            botoEditar.classList.add("bg-orange-500", "hover:bg-orange-700");
+        } else {
+            botoEditar.innerHTML = "Activar Tractament";
+            botoEditar.classList.remove("bg-orange-500", "hover:bg-orange-700");
+            botoEditar.classList.add("bg-green-500", "hover:bg-green-700");
+        }
 
         // Omple els camps del formulari amb la informació del tractament
         inputNom.value = nom.innerText;
@@ -38,9 +53,9 @@ document.querySelectorAll("#edita-tractament").forEach(function (button) {
     });
 });
 
-//Eliminar tractament
+//Desactivar tractament
 document
-    .querySelector("#eliminar-tractament")
+    .querySelector("#toggle-tractament-btn")
     .addEventListener("click", async () => {
         const tractamentId = document.querySelector("#tractament_id").value;
         try {
@@ -58,10 +73,14 @@ document
                 const element = document.querySelector(
                     `[data-tractament-id="${tractamentId}"]`
                 );
-                element.classList.remove("visible");
-                setTimeout(() => {
-                    element.remove();
-                }, 300);
+
+                const estatElement = element.querySelector(".estat");
+
+                // Canviar el text de l'element d'estat en funció de l'estat actual
+                estatElement.textContent =
+                    estatElement.textContent.trim() === "Actiu"
+                        ? "Inactiu"
+                        : "Actiu";
 
                 const flashMessage = document.querySelector("#flash-message");
                 flashMessage.classList.remove("hidden-flash");
@@ -106,7 +125,7 @@ document
 
 // Afegeix un esdeveniment de clic al botó 'Eliminar Tractament'
 document
-    .getElementById("eliminar-tractament")
+    .getElementById("toggle-tractament-btn")
     .addEventListener("click", function () {
         // Amaga l'element amb la id 'editar-tractament'
         document.getElementById("editar-tractament").style.display = "none";

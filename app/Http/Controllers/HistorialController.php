@@ -41,7 +41,6 @@ class HistorialController extends Controller
 
         if ($data['data'] !== null && isset($data['data']) && $data['data'] !== '') {
             $dataHist = $data['data'];
-            //Tinc la data en string en format yyyy-mm-dd, pero vull un objecte date
             $dataHist = date_create_from_format('Y-m-d', $dataHist);
             $date = date_format($dataHist, 'Y-m-d');
 

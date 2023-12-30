@@ -45,10 +45,10 @@ class DiesDeshabilitatController extends Controller
         foreach ($datesToAdd as $data) {
             // Comprova si hi ha una reserva per aquesta data
             if (Reserve::where('data', $data)->exists()) {
-                $datesNotChanged[] = $data;
+                $dateObject = DateTime::createFromFormat('Y-m-d', $data);
+                $datesNotChanged[] = $dateObject->format('d/m/Y');
                 continue;
             }
-
             $dateFromFormat = DateTime::createFromFormat('Y-m-d', $data);
             $date = $dateFromFormat->format('Y-m-d');
             $diaDeshabilitat = new DiesDeshabilitat();
@@ -58,7 +58,8 @@ class DiesDeshabilitatController extends Controller
         foreach ($datesToDelete as $data) {
             // Comprova si hi ha una reserva per aquesta data
             if (Reserve::where('data', $data)->exists()) {
-                $datesNotChanged[] = $data;
+                $dateObject = DateTime::createFromFormat('Y-m-d', $data);
+                $datesNotChanged[] = $dateObject->format('d/m/Y');
                 continue;
             }
 

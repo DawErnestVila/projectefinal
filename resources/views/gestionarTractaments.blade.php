@@ -72,6 +72,9 @@
                                             Durada
                                         </th>
                                         <th scope="col" class="px-6 py-3">
+                                            Estat
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
                                             Accions
                                         </th>
                                     </tr>
@@ -88,6 +91,9 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 {{ substr($tractament->durada, 0, 5) }}h
+                                            </td>
+                                            <td class="px-6 py-4 estat">
+                                                {{ $tractament->actiu ? 'Actiu' : 'Inactiu' }}
                                             </td>
                                             <td class="px-6 py-4">
                                                 <button id="edita-tractament"
@@ -161,8 +167,8 @@
                                 <div id="editar-tractament" class="flex items-center justify-between mt-4">
                                     <button type="submit" id="editar-tractament-btn"
                                         class="bg-blue-500 hover:bg-blue-700 transition-colors duration-200 text-white py-2 px-4 rounded-md">{{ __('Editar') }}</button>
-                                    <button id="eliminar-tractament" type="button"
-                                        class="bg-red-500 hover:bg-red-700 transition-colors duration-200 text-white py-2 px-4 rounded-md">{{ __('Eliminar Tractament') }}</button>
+                                    <button id="toggle-tractament-btn" type="button"
+                                        class="transition-colors duration-200 text-white py-2 px-4 rounded-md">{{ __('Activar/Inactivar Tractament') }}</button>
                                 </div>
                             </form>
                         </div>
