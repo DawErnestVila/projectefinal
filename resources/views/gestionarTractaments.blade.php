@@ -92,7 +92,8 @@
                                             <td class="px-6 py-4">
                                                 {{ substr($tractament->durada, 0, 5) }}h
                                             </td>
-                                            <td class="px-6 py-4 estat">
+                                            <td
+                                                class="px-6 py-4 estat {{ $tractament->actiu ? 'text-green-600' : 'text-red-600' }} font-black">
                                                 {{ $tractament->actiu ? 'Actiu' : 'Inactiu' }}
                                             </td>
                                             <td class="px-6 py-4">

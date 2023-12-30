@@ -139,8 +139,8 @@
                                 </select>
 
                                 <!-- Input per buscar per data -->
-                                <input type="text" id="dateSearch" placeholder="Data (DD/MM/YYYY)"
-                                    class="px-4 border border-gray-300 rounded mb-2">
+                                <input type="text" id="dateSearch" pattern="\d{1,2}/\d{1,2}/\d{4}"
+                                    placeholder="Data (DD/MM/YYYY)" class="px-4 border border-gray-300 rounded mb-2">
 
                                 <!-- Input per buscar per nom de l'alumne -->
                                 <input type="text" id="studentSearch" placeholder="Nom de l'Alumne"

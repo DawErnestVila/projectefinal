@@ -82,6 +82,13 @@ document
                         ? "Inactiu"
                         : "Actiu";
 
+                estatElement.classList.remove("text-green-600", "text-red-600");
+                estatElement.classList.add(
+                    estatElement.textContent.trim() === "Actiu"
+                        ? "text-green-600"
+                        : "text-red-600"
+                );
+
                 const flashMessage = document.querySelector("#flash-message");
                 flashMessage.classList.remove("hidden-flash");
                 flashMessage.classList.add("visible-flash");
