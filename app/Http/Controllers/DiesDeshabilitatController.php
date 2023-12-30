@@ -23,6 +23,10 @@ class DiesDeshabilitatController extends Controller
 
     public function actualitzarDiesDeshabilitats(Request $request)
     {
+        // Elimina les dates anteriors a avui
+        $today = date('Y-m-d');
+        DiesDeshabilitat::where('data', '<', $today)->delete();
+
         $dies = $request->dates;
         $dies = explode(', ', $dies);
 

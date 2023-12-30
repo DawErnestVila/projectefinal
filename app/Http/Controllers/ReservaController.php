@@ -33,6 +33,25 @@ class ReservaController extends Controller
 
     public function storeReserva(Request $request)
     {
+        // Elimina les reserves anteriors a avui
+        $reserves = Reserve::all();
+        $today = date('Y-m-d');
+        foreach ($reserves as $reserva) {
+            if ($reserva->data < $today) {
+                $historial = Historial::create([
+                    "client_name" => Client::find($reserva->client_id)->nom,
+                    "tractament_name" => Tractament::find($reserva->tractament_id)->nom,
+                    "user_name" => "-",
+                    "data" => $reserva->data,
+                    "hora" => $reserva->hora,
+                    "data_cancelacio" => $today,
+                    "motiu_cancelacio" => "El client no ha vingut a la reserva",
+                ]);
+                Reserve::destroy($reserva->id);
+            }
+        }
+
+        //Funcionament de la funcio
 
         $data = json_decode($request->getContent(), true);
 
