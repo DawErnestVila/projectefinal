@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DiesDeshabilitat;
 use DateTime;
 use DateTimeZone;
+use App\Models\Reserve;
 use Illuminate\Http\Request;
+use App\Models\DiesDeshabilitat;
 
 class DiesDeshabilitatController extends Controller
 {
@@ -22,7 +23,6 @@ class DiesDeshabilitatController extends Controller
 
     public function actualitzarDiesDeshabilitats(Request $request)
     {
-        //el request de dates és un string que ve separat per una coma i un espai
         $dies = $request->dates;
         $dies = explode(', ', $dies);
 
@@ -37,7 +37,14 @@ class DiesDeshabilitatController extends Controller
 
         $datesToDelete = array_diff($datesDB, $dates);
 
+        $datesNotChanged = [];
         foreach ($datesToAdd as $data) {
+            // Comprova si hi ha una reserva per aquesta data
+            if (Reserve::where('data', $data)->exists()) {
+                $datesNotChanged[] = $data;
+                continue;
+            }
+
             $dateFromFormat = DateTime::createFromFormat('Y-m-d', $data);
             $date = $dateFromFormat->format('Y-m-d');
             $diaDeshabilitat = new DiesDeshabilitat();
@@ -45,11 +52,24 @@ class DiesDeshabilitatController extends Controller
             $diaDeshabilitat->save();
         }
         foreach ($datesToDelete as $data) {
+            // Comprova si hi ha una reserva per aquesta data
+            if (Reserve::where('data', $data)->exists()) {
+                $datesNotChanged[] = $data;
+                continue;
+            }
+
             $dateFromFormat = DateTime::createFromFormat('Y-m-d', $data);
             $date = $dateFromFormat->format('Y-m-d');
             $diaDeshabilitat = DiesDeshabilitat::where('data', $date)->first();
             $diaDeshabilitat->delete();
         }
-        return redirect()->route('gestionar-horaris')->with('success', 'Dies deshabilitats actualitzats amb èxit');
+
+        $message = 'Dies deshabilitats actualitzats amb èxit';
+        if (!empty($datesNotChanged)) {
+            $error_message = 'No s\'han pogut canviar els dies: ' . implode(', ', $datesNotChanged);
+            return redirect()->route('gestionar-horaris')->with('success', $message)->with('error', $error_message);
+        }
+
+        return redirect()->route('gestionar-horaris')->with('success', $message);
     }
 }

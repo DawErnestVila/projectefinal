@@ -1,23 +1,19 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
+    <x-slot name="header">
         <div class="flex justify-evenly">
             <h2 class="font-semibold  text-gray-800 leading-tight">
-                <a href="#historial" class="hover:underline focus:underline">
-                    {{ __('Tractaments') }}
+                <a href="#diesFesta" class="hover:underline focus:underline">
+                    {{ __('Dies de Festa') }}
                 </a>
             </h2>
             <h2 class="font-semibold  text-gray-800 leading-tight">
-                <a href="#editar-tractament" class="hover:underline focus:underline">
-                    {{ __('Editar Tractament') }}
+                <a href="#gestionarHoraris" class="hover:underline focus:underline">
+                    {{ __('Gestionar Horaris') }}
                 </a>
             </h2>
-            <h2 class="font-semibold  text-gray-800 leading-tight">
-                <a href="#afegir-tractament" class="hover:underline focus:underline">
-                    {{ __('Afegir Tractament') }}
-                </a>
-            </h2>
+
         </div>
-    </x-slot> --}}
+    </x-slot>
 
     <link rel="stylesheet" href="{{ asset('css/reserves.css') }}">
 
@@ -48,7 +44,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 id="historial" class="text-4xl font-black text-center mb-7">Dies de Festa</h1>
+                    <h1 id="diesFesta" class="text-4xl font-black text-center mb-7">Dies de Festa</h1>
                     <form action="{{ route('actualitzar-dies-deshabilitats') }}" method="POST">
                         @csrf
                         <div class="mx-auto">
@@ -144,7 +140,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <h1 id="historial" class="text-4xl font-black text-center mb-7">Gestionar Horaris</h1>
+                    <h1 id="gestionarHoraris" class="text-4xl font-black text-center mb-7">Gestionar Horaris</h1>
                     <div class="mx-auto">
                         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
                             <form method="post" action="{{ route('actualitza-horaris') }}"
@@ -163,42 +159,49 @@
                                             ->first();
                                     @endphp
 
-                                    <div class="mb-6 p-4 bg-gray-100 rounded grid grid-cols-2">
-                                        <div>
+                                    <div class="mb-6 p-4 bg-gray-100 rounded grid grid-cols-2 gap-4">
+                                        <!-- Checkbox -->
+                                        <div class="col-span-1">
                                             <label
-                                                class="block text-sm font-medium text-gray-700">{{ $nomsDiesSetmana[$dia - 1] }}</label>
-                                            <div class="flex items-center mt-2">
-                                                <input type="checkbox" name="dies[]" value="{{ $dia }}"
-                                                    {{ $horariDia ? 'checked' : '' }}
-                                                    class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
-                                                <span class="ml-2 text-sm text-gray-600">Obert</span>
+                                                class="block text-sm font-medium text-gray-700">{{ $nomsDiesSetmana[$dia - 1] }}
+                                                <div class="flex items-center mt-2">
+                                                    <input type="checkbox" name="dies[]" value="{{ $dia }}"
+                                                        {{ $horariDia ? 'checked' : '' }}
+                                                        class="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out">
+                                                    <span class="ml-2 text-sm text-gray-600">Obert</span>
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <!-- Hora d'obertura i tancament -->
+                                        <div class="col-span-1 flex flex-col space-y-4">
+                                            <div class="w-full">
+                                                <label for="hora_obertura_{{ $dia }}"
+                                                    class="block text-sm font-medium text-gray-700">Hora
+                                                    d'obertura</label>
+                                                <input type="text" name="hores[{{ $dia }}][hora_obertura]"
+                                                    value="{{ $horariDia ? \Carbon\Carbon::parse($horariDia['hora_obertura'])->format('H:i') : '' }}"
+                                                    class="form-input w-full mt-1 hora-input"
+                                                    pattern="[0-2][0-9]:[0-5][0-9]" placeholder="08:00"
+                                                    title="Format: HH:mm">
+                                                @error("hores.$dia.hora_obertura")
+                                                    <span class="text-red-500">{{ $message }}</span>
+                                                @enderror
                                             </div>
-                                        </div>
 
-                                        <div class="flex flex-col">
-                                            <label for="hora_obertura_{{ $dia }}"
-                                                class="block text-sm font-medium text-gray-700">Hora d'obertura</label>
-                                            <input type="text" name="hores[{{ $dia }}][hora_obertura]"
-                                                value="{{ $horariDia ? \Carbon\Carbon::parse($horariDia['hora_obertura'])->format('H:i') : '' }}"
-                                                class="form-input mt-1 hora-input" pattern="[0-2][0-9]:[0-5][0-9]"
-                                                placeholder="08:00" title="Format: HH:mm">
-                                            @error("hores.$dia.hora_obertura")
-                                                <span class="text-red-500">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
-                                        <div class="flex flex-col mt-4">
-                                            <label for="hora_tancament_{{ $dia }}"
-                                                class="block text-sm font-medium text-gray-700">Hora de
-                                                tancament</label>
-                                            <input type="text" name="hores[{{ $dia }}][hora_tancament]"
-                                                value="{{ $horariDia ? \Carbon\Carbon::parse($horariDia['hora_tancament'])->format('H:i') : '' }}"
-                                                class="form-input mt-1 hora-input" pattern="[0-2][0-9]:[0-5][0-9]"
-                                                placeholder="20:00" title="Format: HH:mm">
-
-                                            @error("hores.$dia.hora_tancament")
-                                                <span class="text-red-500">{{ $message }}</span>
-                                            @enderror
+                                            <div class="w-full">
+                                                <label for="hora_tancament_{{ $dia }}"
+                                                    class="block text-sm font-medium text-gray-700">Hora de
+                                                    tancament</label>
+                                                <input type="text" name="hores[{{ $dia }}][hora_tancament]"
+                                                    value="{{ $horariDia ? \Carbon\Carbon::parse($horariDia['hora_tancament'])->format('H:i') : '' }}"
+                                                    class="form-input w-full mt-1 hora-input"
+                                                    pattern="[0-2][0-9]:[0-5][0-9]" placeholder="20:00"
+                                                    title="Format: HH:mm">
+                                                @error("hores.$dia.hora_tancament")
+                                                    <span class="text-red-500">{{ $message }}</span>
+                                                @enderror
+                                            </div>
                                         </div>
                                     </div>
                                 @endfor
