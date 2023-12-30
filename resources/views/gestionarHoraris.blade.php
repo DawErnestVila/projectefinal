@@ -50,8 +50,10 @@
                         <div class="mx-auto">
                             <div class="flex flex-col items-center space-y-4">
                                 <div class="relative w-full overflow-x-auto shadow-md ">
-                                    <x-flatpickr name="dates" :config="[
+                                    <label for="dates">Selecciona els dies de festa</label>
+                                    <x-flatpickr id="dates" name="dates" :config="[
                                         'dateFormat' => 'd/m/Y',
+                                        'altFormat' => 'd/m/Y',
                                         'locale' => [
                                             'firstDayOfWeek' => 1,
                                             'weekdays' => [
