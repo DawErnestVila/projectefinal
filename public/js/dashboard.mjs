@@ -50,8 +50,35 @@ const filterData = (e) => {
 
 const assignarResrva = async (e) => {
     const reservaId = e.currentTarget.dataset.reservaId;
+    const reservaDate = new Date(e.currentTarget.dataset.reservaDate);
     const idUsuari = document.querySelector("#user_id").value;
-    // Necessito fer una petició post a la API a `${API_URL}/assignarreserva` i que un cop s'hagi assignat la reserva, esborri l'element del DOM
+
+    // Obtenir la data d'avui i posar l'hora a 0 per a comparar només la data
+    const today = new Date();
+    reservaDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    // Comprovar si la data d'avui és la mateixa que la de la reserva
+    if (reservaDate.getTime() !== today.getTime()) {
+        console.log(reservaDate.getTime() + " " + today.getTime());
+        // Mostrar un missatge d'error i sortir de la funció
+        const flashMessage = document.querySelector("#flash-message");
+        flashMessage.classList.remove("hidden-flash");
+        flashMessage.classList.add("visible-flash");
+        flashMessage.classList.add("error-flash");
+        flashMessage.textContent =
+            "No es pot assignar una reserva per a una data diferent d'avui";
+
+        setTimeout(() => {
+            flashMessage.classList.remove("visible-flash");
+            flashMessage.classList.add("hidden-flash");
+            flashMessage.classList.remove("error-flash");
+            flashMessage.innerHTML = "";
+        }, 3000);
+
+        return;
+    }
+
     try {
         const response = await fetch(`${API_URL}/assignarreserva`, {
             method: "POST",
@@ -111,6 +138,7 @@ const buildReservaDom = (element, container) => {
 
     // Afegir la ID com a atribut de l'element
     reservaElement.dataset.reservaId = element.reserva.id;
+    reservaElement.dataset.reservaDate = element.reserva.data;
 
     const headerElement = document.createElement("div");
     headerElement.classList.add("reserva__header");
