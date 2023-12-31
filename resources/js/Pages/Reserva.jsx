@@ -13,58 +13,46 @@ import {
 } from "../apiReserva";
 const Reserva = ({ user }) => {
     const [selectedTractament, setSelectedTractament] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null); // Nou estat per la data seleccionada
     const [tractaments, setTractaments] = useState([]);
     const [horaris, setHoraris] = useState([]);
-    const [disabledDates, setDisabledDates] = useState([]);
+    const [disabledDates, setDisabledDates] = useState([]); // Nou estat per les dates deshabilitades
     const [availableHours, setAvailableHours] = useState([]);
     const [openDays, setOpenDays] = useState([]);
     const [selectedHour, setSelectedHour] = useState(null);
     const [missatge, setMissatge] = useState(null);
 
-    // Funció per obtenir els dies oberts per reserves mitjançant una crida a l'API
     const getOpenDays = async () => {
         try {
             const response = await getHoraris();
             const horaris = response.data;
-            // Aconseguir els dies oberts a partir de la resposta de l'API
             const openDays = horaris.map((horari) => {
                 return horari.dia;
             });
-            // Actualitza l'estat amb els dies oberts
             setOpenDays(openDays);
         } catch (error) {
             console.error("Error fetching open days:", error);
         }
     };
 
-    // useEffect que s'executa al carregar la pàgina per obtenir els tractaments, horaris i dates deshabilitades
     useEffect(() => {
         getOpenDays();
         const fetchData = async () => {
             try {
-                // Obté els tractaments actius mitjançant una crida a l'API
                 const response = await getTractaments();
                 const tractamentsActius = response.data.filter(
                     (tractament) => tractament.actiu
                 );
-                // Actualitza l'estat amb els tractaments actius
                 setTractaments(tractamentsActius);
-
-                // Obté els horaris mitjançant una crida a l'API
                 const horarisResp = await getHoraris();
                 setHoraris(horarisResp.data);
-
-                // Obté les dates deshabilitades mitjançant una crida a l'API
                 const disabledDatesResp = await getDiesDeshabilitats();
-                const disabledDatesAux = [];
-                // Converteix les dates deshabilitades al format necessari i les emmagatzema a l'array
+                let disabledDatesAux = [];
                 disabledDatesResp.data.forEach((date) => {
                     disabledDatesAux.push(
                         new Date(date.data).toISOString().split("T")[0]
                     );
                 });
-                // Actualitza l'estat amb les dates deshabilitades
                 setDisabledDates(disabledDatesAux);
             } catch (error) {
                 console.error("Error fetching treatments:", error);
@@ -74,15 +62,14 @@ const Reserva = ({ user }) => {
         fetchData();
     }, []);
 
-    // useEffect que s'executa quan canvia la data o el tractament seleccionat per obtenir les hores disponibles
     useEffect(() => {
+        // Assegura't que la funció només s'executi quan selectedDate és diferent de null
         if (selectedDate && selectedTractament) {
-            // Funcio per aconseguir les hores disponibles
+            // Aquí pots cridar la funció que necessites
             getAvailableHours();
         }
     }, [selectedDate, selectedTractament]);
 
-    // Funció per obtenir les hores disponibles sense tenir en compte les reserves
     const getAvailableHoursWithoutReservations = (startHour, endHour) => {
         const availableHours = [];
 
@@ -93,17 +80,19 @@ const Reserva = ({ user }) => {
             availableHours.push(`${hour}:45`);
         }
 
+        // console.log(availableHours);
         return availableHours;
     };
 
-    // Funció per obtenir les hores disponibles en funció del dia i tractament seleccionat
+    // Afegeix una funció per obtenir les hores disponibles en funció del dia i tractament seleccionat
     const getAvailableHours = async () => {
         try {
-            // Obté les hores reservades per al dia seleccionat mitjançant una crida a l'API
-            const { data: reservedHoursData } = await getHoresDisponibles({
+            const reservedHoursData = await getHoresDisponibles({
                 dia: selectedDate,
             });
-            const data = reservedHoursData[0];
+
+            let data = reservedHoursData.data;
+            data = data[0];
 
             // Obtenir les hores disponibles sense tenir en compte les reserves
             const availableHoursWithoutReservations =
@@ -112,20 +101,23 @@ const Reserva = ({ user }) => {
                     extractHour(data.hora_tancament)
                 );
 
+            // console.log(availableHoursWithoutReservations);
+
             function extractHour(timeString) {
                 const [hour] = timeString.split(":");
                 return hour;
             }
 
-            // Obté les reserves per al dia seleccionat mitjançant una crida a l'API
             const reservesForDay = await getReservesForDay();
+            // console.log(reservesForDay);
 
-            // Elimina les hores ja reservades
+            // Eliminar les hores ja reservades
             const availableHours = availableHoursWithoutReservations.map(
                 (hour) => {
                     const isReserved = reservesForDay.some(
                         (reserve) =>
                             reserve.horaInicial <= hour &&
+                            //! Canviar el > per >= si vols afegir 15 minuts de marge entre reserves
                             reserve.horaFinal > hour
                     );
 
@@ -133,28 +125,28 @@ const Reserva = ({ user }) => {
                 }
             );
 
-            // Obtenir el tractament seleccionat
+            // Actualitzar l'estat amb les hores disponibles
+            // console.log(availableHours);
             const tractament = tractaments.find(
                 (tractament) => tractament.id == selectedTractament
             );
-
-            // Actualitzar l'estat amb les hores disponibles
+            // fitTractament(tractament, availableHours);
             setAvailableHours(
                 obtenirHoresDisponibles(availableHours, tractament.durada)
             );
+            // // Actualitzar l'estat amb les hores disponibles
+            // setAvailableHours(availableHours);
         } catch (error) {
             console.error("Error fetching available hours:", error);
         }
     };
 
-    // Funció per obtenir les reserves per al dia seleccionat mitjançant una crida a l'API
     const getReservesForDay = async () => {
         try {
             const reservesResponse = await getReservesDia({
                 dia: selectedDate,
             });
 
-            // Processa les reserves per obtenir les hores finals dels tractaments
             const horesFinalsTractament = reservesResponse.data.map(
                 (reserva) => {
                     const [hora, minuts, segons] = reserva.hora.split(":");
@@ -183,7 +175,6 @@ const Reserva = ({ user }) => {
         }
     };
 
-    // Funció per sumar hores a una hora determinada
     function sumarHores(hora1, hora2) {
         // Parseja les hores en minuts
         const [hores1, minuts1] = hora1.split(":").map(Number);
@@ -211,35 +202,31 @@ const Reserva = ({ user }) => {
         return parseInt(temps[0]) * 60 + parseInt(temps[1]);
     }
 
-    // Funció per obtenir les hores disponibles considerant la durada del tractament
     function obtenirHoresDisponibles(hores, duradaTractament) {
-        const horesDisponibles = [];
+        // console.log(duradaTractament);
+        var horesDisponibles = [];
 
         // Converteix la durada del tractament a minuts
-        const duradaMinuts = convertirHoraAMinuts(duradaTractament);
+        var duradaMinuts = convertirHoraAMinuts(duradaTractament);
 
         // Calcula el nombre d'intervals necessaris
-        const intervalsNecessaris = duradaMinuts / 15;
+        var intervalsNecessaris = duradaMinuts / 15;
 
         // Itera sobre les hores disponibles
-        for (let i = 0; i < hores.length; i++) {
-            // Verifica si l'hora actual no és nula (ja que algunes hores poden ser nules si ja estan reservades)
+        for (var i = 0; i < hores.length; i++) {
             if (hores[i] !== null) {
-                // Verifica si hi ha prou espai a l'array per als intervals necessaris del tractament
+                // Verifica si hi ha prou espai a l'array per als intervals necessaris
                 if (i + intervalsNecessaris <= hores.length) {
-                    // Inicia la verificació de la disponibilitat del tractament en aquesta hora
-                    let tractamentEncaixa = true;
-                    // Itera pels intervals necessaris del tractament
-                    for (let j = 0; j < intervalsNecessaris; j++) {
-                        // Verifica si algun dels intervals està ocupat (és nul)
+                    // Verifica la disponibilitat del tractament
+                    var tractamentEncaixa = true;
+                    for (var j = 0; j < intervalsNecessaris; j++) {
                         if (hores[i + j] === null) {
-                            // Si un interval està ocupat, el tractament no encaixa
                             tractamentEncaixa = false;
                             break;
                         }
                     }
 
-                    // Emmagatzema les hores disponibles si el tractament encaixa en aquesta hora
+                    // Emmagatzema les hores disponibles si el tractament encaixa
                     if (tractamentEncaixa) {
                         horesDisponibles.push(hores[i]);
                     }
@@ -250,10 +237,8 @@ const Reserva = ({ user }) => {
         return horesDisponibles;
     }
 
-    // Funció que s'executa al fer submit del formulari de reserva
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Construeix l'objecte de reserva amb les dades necessàries
         const reserva = {
             dia: selectedDate,
             hora: selectedHour,
@@ -261,18 +246,16 @@ const Reserva = ({ user }) => {
             client_id: user.id,
             missatge: missatge,
         };
-        // Realitza una validació abans de fer la reserva
         const correcte = validateDiaHora(reserva);
         if (correcte) {
-            // Fa una crida a l'API per emmagatzemar la reserva
             const response = await storeReserva(reserva);
-            // Fa una crida a Inertia per actualitzar la pàgina després de la reserva
             await Inertia.post("/", {
                 status: response.status,
                 message: response.message,
             });
         }
     };
+
     return (
         <div>
             <div className="self-start mb-3">
