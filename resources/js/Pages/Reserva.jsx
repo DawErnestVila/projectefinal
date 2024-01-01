@@ -13,10 +13,10 @@ import {
 } from "../apiReserva";
 const Reserva = ({ user }) => {
     const [selectedTractament, setSelectedTractament] = useState(null);
-    const [selectedDate, setSelectedDate] = useState(null); // Nou estat per la data seleccionada
+    const [selectedDate, setSelectedDate] = useState(null);
     const [tractaments, setTractaments] = useState([]);
     const [horaris, setHoraris] = useState([]);
-    const [disabledDates, setDisabledDates] = useState([]); // Nou estat per les dates deshabilitades
+    const [disabledDates, setDisabledDates] = useState([]);
     const [availableHours, setAvailableHours] = useState([]);
     const [openDays, setOpenDays] = useState([]);
     const [selectedHour, setSelectedHour] = useState(null);

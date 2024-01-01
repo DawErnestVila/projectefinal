@@ -3,16 +3,18 @@
 namespace App\Http\Controllers;
 
 use DateTime;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Client;
 use App\Models\Reserva;
 use App\Models\Reserve;
+use App\Models\Historial;
+use App\Models\Tractament;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
+use App\Mail\ReservationCancellationMail;
 use App\Mail\ReservationConfirmationMail;
-use App\Models\Client;
-use App\Models\Historial;
-use App\Models\Tractament;
-use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 
 class ReservaController extends Controller
@@ -72,7 +74,6 @@ class ReservaController extends Controller
             ], 400);
         }
 
-        // Falta passar la data de format d/m/Y a Y-m-d
         $dateFromFormat = DateTime::createFromFormat('d/m/Y', $data['dia']);
 
         // If validation passes, create the client
@@ -169,5 +170,42 @@ class ReservaController extends Controller
             'message' => 'Reserva assignada correctament',
             'data' => $historial,
         ]);
+    }
+
+    public function cancelarReserva(Request $request)
+    {
+        $reserva_id = $request->reserva_id;
+        $motiu = $request->motiu;
+
+        // Get the reservation details
+        $reserva = Reserve::find($reserva_id);
+        $clientEmail = $reserva->client->correu;
+
+        // Convert the date string to a Carbon object
+        $dataResCarbon = Carbon::createFromFormat('Y-m-d', $reserva->data);
+
+        // Format the date as 'd/m/Y'
+        $dataResFormatted = $dataResCarbon->format('d/m/Y');
+
+        // Store reservation details for history
+        $historial = Historial::create([
+            "client_name" => $reserva->client->nom,
+            "tractament_name" => $reserva->tractament->nom,
+            "user_name" => "-",
+            "data" => $dataResCarbon,
+            "hora" => $reserva->hora,
+            "data_cancelacio" => now(),
+            "motiu_cancelacio" => $motiu,
+        ]);
+
+        // Delete the reservation
+        Reserve::destroy($reserva_id);
+
+        // Send cancellation email to the client
+        if (filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
+            Mail::to($clientEmail)->send(new ReservationCancellationMail($reserva, $motiu, $dataResFormatted));
+        }
+
+        return redirect()->route('dashboard')->with('success', 'Reserva cancel·lada correctament');
     }
 }

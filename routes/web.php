@@ -1,6 +1,7 @@
 <?php
 
 use Inertia\Inertia;
+use App\Models\Reserve;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\ClientController;
@@ -34,11 +35,15 @@ Route::post('/demanar-hora', [ClientController::class, 'demanarHoraPost'])->name
 Route::get('send-mail', [MailController::class, 'index']);
 
 Route::get('/dashboard', function () {
+    $reserves = [];
 
-    // if (auth()->user()->name != 'Professorat') {
-    //     dd('No tens permisos per accedir a aquesta pàgina');
-    // }
-    return view('dashboard');
+    if (auth()->user()->name == 'Professorat') {
+        $reserves = Reserve::orderBy('data', 'asc')->orderBy('hora', 'asc')->get();
+    }
+
+    return view('dashboard', [
+        'reserves' => $reserves,
+    ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {

@@ -2,20 +2,21 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\HorariController;
+use App\Http\Controllers\ReservaController;
 use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\TractamentController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\VerifyEmailController;
+use App\Http\Controllers\DiesDeshabilitatController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\DiesDeshabilitatController;
-use App\Http\Controllers\HorariController;
-use App\Http\Controllers\TractamentController;
 
 Route::middleware('guest')->group(function () {
     // Route::get('register', [RegisteredUserController::class, 'create'])
@@ -78,5 +79,6 @@ Route::middleware(['professorat'])->group(function () {
     Route::get('/gestionar-tractaments', [TractamentController::class, 'gestionarTractaments'])->name('gestionar-tractaments');
     Route::put('/editar-tractament', [TractamentController::class, 'editarTractament'])->name('editar-tractament');
     Route::post('/crear-tractament', [TractamentController::class, 'crearTractament'])->name('crear-tractament');
+    Route::post('/cancelar-reserva', [ReservaController::class, 'cancelarReserva'])->name('cancelar-reserva');
     Route::put('/user/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.user.status');
 });
