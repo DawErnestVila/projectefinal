@@ -94,7 +94,9 @@
                                                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                                     {{ $reserva->client->nom }}</td>
                                                 <td class="px-6 py-4">{{ $reserva->tractament->nom }}</td>
-                                                <td class="px-6 py-4">{{ $reserva->data }}</td>
+                                                <td class="px-6 py-4">
+                                                    {{ \Carbon\Carbon::createFromFormat('Y-m-d', $reserva->data)->format('d/m/Y') }}
+                                                </td>
                                                 <td class="px-6 py-4">{{ substr($reserva->hora, 0, 5) }}h</td>
                                                 <td class="px-6 py-4">
                                                     <button

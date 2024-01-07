@@ -29,10 +29,14 @@ class ClientController extends Controller
 
     public function demanarHoraGet()
     {
-        // Si l'usuari ja existeix, torna les dades de l'usuari a la vista
-        return Inertia::render('Layout', [
-            'user' => session('user'),
-        ]);
+        if (session('user')) {
+            // Si l'usuari ja existeix, torna les dades de l'usuari a la vista
+            return Inertia::render('Layout', [
+                'user' => session('user'),
+            ]);
+        }
+
+        return redirect()->route('home');
     }
 
     public function demanarHoraPost(Request $request)

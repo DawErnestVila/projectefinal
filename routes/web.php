@@ -4,11 +4,18 @@ use Inertia\Inertia;
 use App\Models\Reserve;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MailController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\ClientController;
+use App\Http\Controllers\HorariController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ReservaController;
+use App\Http\Controllers\HistorialController;
 use App\Http\Controllers\DeleteUserController;
+use App\Http\Controllers\TractamentController;
 use GuzzleHttp\Psr7\Request as GuzzleRequequest;
 use Illuminate\Http\Request as IlluminateRequest;
+use App\Http\Controllers\DiesDeshabilitatController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,5 +59,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['professorat'])->group(function () {
+    Route::get('gestionar-alumnes', [RegisteredUserController::class, 'create'])
+        ->name('gestionar-alumnes');
+    Route::post('register', [RegisteredUserController::class, 'store'])->name('register');
+    Route::get('/register', [RegisteredUserController::class, 'create'])->name('register');
+    Route::delete('/delete-user', [DeleteUserController::class, 'destroy'])->name('delete.user');
+    Route::get('/historial-reserves', [HistorialController::class, 'index'])->name('historial-reserves');
+    Route::get('/gestionar-horaris', [HorariController::class, 'gestionarHoraris'])->name('gestionar-horaris');
+    Route::put('/actualizar-horaris', [HorariController::class, 'actualizarHoraris'])->name('actualitza-horaris');
+    Route::post('/acutalitzardiesdeshabilitats', [DiesDeshabilitatController::class, 'actualitzarDiesDeshabilitats'])->name('actualitzar-dies-deshabilitats');
+    Route::get('/gestionar-tractaments', [TractamentController::class, 'gestionarTractaments'])->name('gestionar-tractaments');
+    Route::put('/editar-tractament', [TractamentController::class, 'editarTractament'])->name('editar-tractament');
+    Route::post('/crear-tractament', [TractamentController::class, 'crearTractament'])->name('crear-tractament');
+    Route::post('/cancelar-reserva', [ReservaController::class, 'cancelarReserva'])->name('cancelar-reserva');
+    Route::put('/user/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle.user.status');
+});
 
 require __DIR__ . '/auth.php';

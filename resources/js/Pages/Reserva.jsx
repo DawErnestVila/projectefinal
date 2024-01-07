@@ -78,13 +78,34 @@ const Reserva = ({ user }) => {
     const getAvailableHoursWithoutReservations = (startHour, endHour) => {
         const availableHours = [];
 
-        for (let hour = startHour; hour < endHour; hour++) {
-            availableHours.push(`${hour}:00`);
-            availableHours.push(`${hour}:15`);
-            availableHours.push(`${hour}:30`);
-            availableHours.push(`${hour}:45`);
+        // Parsejem les hores i minuts d'inici i tancament
+        const [startHourInt, startMinute] = startHour.split(":").map(Number);
+        const [endHourInt, endMinute] = endHour.split(":").map(Number);
+
+        // Bucle per recórrer les hores i minuts disponibles
+        for (
+            let hour = startHourInt, minute = startMinute;
+            hour < endHourInt || (hour === endHourInt && minute < endMinute);
+
+        ) {
+            // Afegim l'hora actual a la llista de hores disponibles
+            availableHours.push(
+                `${hour.toString().padStart(2, "0")}:${minute
+                    .toString()
+                    .padStart(2, "0")}`
+            );
+
+            // Incrementem els minuts en intervals de 15
+            minute += 15;
+
+            // Comprovem si hem arribat als 60 minuts i actualitzem les hores
+            if (minute === 60 || minute > 60) {
+                minute = 0;
+                hour++;
+            }
         }
 
+        // Retornem la llista de hores disponibles
         return availableHours;
     };
 
@@ -101,13 +122,13 @@ const Reserva = ({ user }) => {
             // Obtenir les hores disponibles sense tenir en compte les reserves
             const availableHoursWithoutReservations =
                 getAvailableHoursWithoutReservations(
-                    extractHour(data.hora_obertura),
-                    extractHour(data.hora_tancament)
+                    extractHourAndMinute(data.hora_obertura),
+                    extractHourAndMinute(data.hora_tancament)
                 );
 
-            function extractHour(timeString) {
-                const [hour] = timeString.split(":");
-                return hour;
+            function extractHourAndMinute(timeString) {
+                const [hour, minute] = timeString.split(":");
+                return `${hour}:${minute}`;
             }
 
             const reservesForDay = await getReservesForDay();

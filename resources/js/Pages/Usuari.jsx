@@ -9,7 +9,6 @@ const Usuari = (props) => {
         name: "",
         cognoms: "",
         email: "",
-        // Altres propietats de l'usuari
     });
     const [showUserDataForm, setShowUserDataForm] = useState(false);
     const [isUserExist, setIsUserExist] = useState(false);
@@ -36,7 +35,6 @@ const Usuari = (props) => {
         e.preventDefault();
 
         const validatNum = validateNum(phoneNumber);
-        // Falta verificar si l'usuari ja existeix
 
         if (validatNum) {
             let userExist = false;
@@ -56,7 +54,6 @@ const Usuari = (props) => {
                 );
 
                 if (validat) {
-                    // Realiza la solicitud POST aquí después de validar el nombre y el correo electrónico
                     const response = await store({
                         nom: userData.name,
                         cognoms: userData.cognoms,
@@ -70,6 +67,10 @@ const Usuari = (props) => {
                         });
                     } else {
                         console.log("Error al crear l'usuari");
+                        await Inertia.post("/", {
+                            status: "error",
+                            missatge: "Error al crear l'usuari",
+                        });
                     }
                 } else {
                     setIsUserExist(false);
@@ -173,7 +174,6 @@ const Usuari = (props) => {
                             className="text-xs text-red-500 mt-0 mb-2"
                             role="alert"
                         ></div>
-                        {/* Otros campos del formulario del usuario */}
                     </>
                 )}
                 <button
