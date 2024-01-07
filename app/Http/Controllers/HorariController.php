@@ -57,8 +57,18 @@ class HorariController extends Controller
     {
         $request->validate([
             'dies' => 'required|array',
-            'hores.*.hora_obertura' => 'nullable|date_format:H:i',
-            'hores.*.hora_tancament' => 'nullable|date_format:H:i|after:hores.*.hora_obertura',
+            'hores.*.hora_obertura' => ['nullable', 'date_format:H:i', function ($attribute, $value, $fail) {
+                $minutes = explode(':', $value)[1];
+                if (!in_array($minutes, ['00', '15', '30', '45'])) {
+                    $fail($attribute . ' ha de tenir els minuts com a 00, 15, 30 o 45.');
+                }
+            }],
+            'hores.*.hora_tancament' => ['nullable', 'date_format:H:i', 'after:hores.*.hora_obertura', function ($attribute, $value, $fail) {
+                $minutes = explode(':', $value)[1];
+                if (!in_array($minutes, ['00', '15', '30', '45'])) {
+                    $fail($attribute . ' ha de tenir els minuts com a 00, 15, 30 o 45.');
+                }
+            }],
         ]);
         $dies = $request->dies;
         $hores = $request->hores;
