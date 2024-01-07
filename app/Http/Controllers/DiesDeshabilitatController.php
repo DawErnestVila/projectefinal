@@ -38,7 +38,6 @@ class DiesDeshabilitatController extends Controller
         $datesDB = DiesDeshabilitat::all()->pluck('data')->toArray();
 
         $datesToAdd = array_diff($dates, $datesDB);
-
         $datesToDelete = array_diff($datesDB, $dates);
 
         $datesNotChanged = [];
@@ -69,12 +68,14 @@ class DiesDeshabilitatController extends Controller
             $diaDeshabilitat->delete();
         }
 
-        $message = 'Dies deshabilitats actualitzats amb èxit';
-        if (!empty($datesNotChanged)) {
+        $datesDBAfter = DiesDeshabilitat::all()->pluck('data')->toArray();
+
+        if ($datesDB == $datesDBAfter) {
             $error_message = 'No s\'han pogut canviar els dies: ' . implode(', ', $datesNotChanged);
-            return redirect()->route('gestionar-horaris')->with('success', $message)->with('error', $error_message);
+            return redirect()->route('gestionar-horaris')->with('error', $error_message);
         }
 
+        $message = 'Dies deshabilitats actualitzats amb èxit';
         return redirect()->route('gestionar-horaris')->with('success', $message);
     }
 }
