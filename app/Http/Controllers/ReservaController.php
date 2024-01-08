@@ -90,14 +90,24 @@ class ReservaController extends Controller
 
         // Check if the email address is valid
         if (filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
-            // Send confirmation email to the client
-            Mail::to($clientEmail)->send(new ReservationConfirmationMail($reserva));
+            try {
+                // Intenta enviar el correu
+                Mail::to($clientEmail)->send(new ReservationConfirmationMail($reserva));
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Reserva creada correctament',
-                'data' => $reserva,
-            ]);
+                // Retorna una resposta JSON d'èxit si el correu s'ha enviat correctament
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Reserva creada correctament',
+                    'data' => $reserva,
+                ]);
+            } catch (\Exception $e) {
+                // En cas d'error al enviar el correu, retorna una resposta JSON amb estatus d'error
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Hi ha hagut un error en enviar el correu.',
+                    'error' => $e->getMessage(),  // Opcional: pots afegir informació addicional sobre l'error
+                ], 500); // Pots canviar el codi d'estatus segons les teves necessitats
+            }
         } else {
             // Handle the case where the email address is not valid
             return response()->json([
@@ -197,15 +207,18 @@ class ReservaController extends Controller
             "data_cancelacio" => now(),
             "motiu_cancelacio" => $motiu,
         ]);
-
         // Delete the reservation
         Reserve::destroy($reserva_id);
+        try {
+            // Send cancellation email to the client
+            if (filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
+                Mail::to($clientEmail)->send(new ReservationCancellationMail($reserva, $motiu, $dataResFormatted));
+            }
 
-        // Send cancellation email to the client
-        if (filter_var($clientEmail, FILTER_VALIDATE_EMAIL)) {
-            Mail::to($clientEmail)->send(new ReservationCancellationMail($reserva, $motiu, $dataResFormatted));
+            return redirect()->route('dashboard')->with('success', 'Reserva cancel·lada correctament');
+        } catch (\Exception $e) {
+            // En cas d'error en la cancellació, redirigeix amb un missatge d'error
+            return redirect()->route('dashboard')->with('error', 'Hi ha hagut un error en cancel·lar la reserva. Detalls de l\'error: ' . $e->getMessage());
         }
-
-        return redirect()->route('dashboard')->with('success', 'Reserva cancel·lada correctament');
     }
 }
